@@ -1,12 +1,15 @@
 import argparse
+from lattec import __version__
 
 __all__ = [
-    'cli'
+    'main'
 ]
 
-arg_parser = argparse.ArgumentParser(description='Latte compiler')
+arg_parser = argparse.ArgumentParser(description='Latte compiler', prog='lattec')
 arg_parser.add_argument('path', metavar='FILE', type=argparse.FileType('r'), help='File to be compiled.')
 arg_parser.add_argument('--output', '-o', dest='output', type=str, help='Output file path.')
+arg_parser.add_argument('--verbose', dest='verbose', type=bool, help='Additional log output', default=False)
+arg_parser.add_argument('--version', '-v', action='version', version='%(prog)s ' + __version__)
 
 
 def cli():
@@ -18,3 +21,7 @@ def cli():
         args.output = name
 
     return args
+
+
+def main():
+    arg = cli()
