@@ -9,44 +9,97 @@ class State:
         self.names = {}
         self.redeclarations = []
         self.undeclared_uses = []
+        self.level = 0
+        self.old_names = []
 
     def summarize(self):
         if self.redeclarations or self.undeclared_uses:
             raise LatteVariableNamesError(self.redeclarations, self.undeclared_uses)
 
-    def add_name(self, name, line, level):
+    def add_name(self, name: str, line: int):
         if name in self.names:
             old_line, old_level = self.names[name]
-            if old_level == level:
+            if old_level == self.level:
                 self.redeclarations.append(Redeclaration(name, old_line, line))
                 return
 
-        self.names[name] = (line, level)
+        self.names[name] = (line, self.level)
 
     def check_name(self, name, line):
         if name not in self.names:
             self.undeclared_uses.append(UndeclaredUse(name, line))
 
+    def level_up(self):
+        self.level += 1
+        self.store_names()
+
+    def level_down(self):
+        self.level -= 1
+        self.restore_names()
+
+    def store_names(self):
+        self.old_names.append(self.names)
+        self.names = dict(self.names)
+
+    def restore_names(self):
+        self.names = self.old_names[-1]
+        self.old_names = self.old_names[:-1]
+
 
 class LatteVariableUseListener(LatteListener):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.state = State()
+
+    def summarize(self):
+        self.state.summarize()
 
     def enterProgram(self, ctx: LatteParser.ProgramContext):
-        raise NotImplementedError()
+        self.state.level_up()
+
+        def _enter_top_def(ctx: LatteParser.TopDefContext):
+            if isinstance(ctx, LatteParser.FnDefContext):
+                self.state.add_name(ctx.name.text, ctx.start.line)
+
+        for top_def in ctx.topDef():
+            _enter_top_def(top_def)
+
+        for top_def in ctx.topDef():
+            top_def.enterRule(self)
+
+        self.state.level_down()
 
     def enterFnDef(self, ctx: LatteParser.FnDefContext):
-        raise NotImplementedError()
+        self.state.level_up()
+
+        ctx.type_().enterRule(self)
+
+        args_vec = ctx.argVec()
+        if args_vec:
+            args_vec.enterRule(self)
+
+        ctx.block().enterRule(self)
+
+        self.state.level_down()
 
     def enterClsDef(self, ctx: LatteParser.ClsDefContext):
         raise NotImplementedError()
 
     def enterArgVec(self, ctx: LatteParser.ArgVecContext):
-        raise NotImplementedError()
+        for arg in ctx.arg():
+            arg.enterRule(self)
 
     def enterArg(self, ctx: LatteParser.ArgContext):
-        raise NotImplementedError()
+        ctx.type_().enterRule(self)
+        self.state.add_name(ctx.name.text, ctx.start.line)
 
     def enterBlock(self, ctx: LatteParser.BlockContext):
-        raise NotImplementedError()
+        self.state.level_up()
+
+        for stmt in ctx.stmt():
+            stmt.enterRule(self)
+
+        self.state.level_down()
 
     def enterField(self, ctx: LatteParser.FieldContext):
         raise NotImplementedError()

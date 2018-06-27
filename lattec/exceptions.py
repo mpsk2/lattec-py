@@ -1,6 +1,6 @@
 import typing
 
-from validations.single_errors import Redeclaration, UndeclaredUse
+from lattec.validations.single_errors import Redeclaration, UndeclaredUse
 
 
 class LatteException(Exception):

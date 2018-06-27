@@ -5,6 +5,7 @@ import sys
 from lattec import __version__
 from lattec.exceptions import LatteParserError
 from lattec.parser import parse_file
+from lattec.validations.validate import validate
 
 __all__ = [
     'main',
@@ -30,10 +31,6 @@ def cli():
     return args
 
 
-def validate(program_tree):
-    raise NotImplementedError('validation')
-
-
 def compile_latte(program_tree):
     raise NotImplementedError('compile')
 
@@ -45,10 +42,10 @@ def main_f():
         print(args)
 
     parser = parse_file(args.path.name)
-    program_tree = parser.program()
+    program_ctx = parser.program()
 
-    validate(program_tree)
-    compile_latte(program_tree)
+    validate(program_ctx)
+    compile_latte(program_ctx)
 
 
 def main():

@@ -13,7 +13,7 @@ def test_bad_file(monkeypatch, file_path):
     with pytest.raises(Exception) as cm:
         main_f()
 
-    assert cm.type != NotImplementedError
+    assert cm.type != NotImplementedError, cm.value
 
 
 @pytest.mark.parametrize("file_path", glob.iglob('tests/parser/good/**/*.lat', recursive=True))

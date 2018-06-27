@@ -12,6 +12,7 @@ tests_require = [
     'pytest',
     'pytest-cov',
     'pytest-mock',
+    'pytest-xdist',
 ]
 
 pkg = __import__('lattec')
