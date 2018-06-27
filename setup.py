@@ -3,7 +3,7 @@
 from distutils.core import setup
 import setuptools
 
-setup_requires = [
+install_requires = [
     'antlr4-python3-runtime',
     'pytest-runner',
 ]
@@ -22,7 +22,7 @@ setup(
     version=pkg.__version__,
     packages=setuptools.find_packages(),
     long_description=open('README.rst').read(),
-    setup_requires=setup_requires,
+    install_requires=install_requires,
     tests_require=tests_require,
     classifiers=[
         'Development Status :: 1 - Planning',
