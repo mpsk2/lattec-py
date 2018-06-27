@@ -16,6 +16,7 @@ arg_parser.add_argument('path', metavar='FILE', type=argparse.FileType('r'), hel
 arg_parser.add_argument('--output', '-o', dest='output', type=str, help='Output file path.')
 arg_parser.add_argument('--verbose', dest='verbose', type=bool, help='Additional log output', default=False)
 arg_parser.add_argument('--version', '-v', action='version', version='%(prog)s ' + __version__)
+arg_parser.add_argument('--validation-only', action='store_true', help='Run only validations')
 
 
 def cli():
@@ -29,6 +30,14 @@ def cli():
     return args
 
 
+def validate(program_tree):
+    raise NotImplementedError('validation')
+
+
+def compile_latte(program_tree):
+    raise NotImplementedError('compile')
+
+
 def main_f():
     args = cli()
 
@@ -37,6 +46,9 @@ def main_f():
 
     parser = parse_file(args.path.name)
     program_tree = parser.program()
+
+    validate(program_tree)
+    compile_latte(program_tree)
 
 
 def main():
