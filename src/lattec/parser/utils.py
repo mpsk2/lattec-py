@@ -17,12 +17,6 @@ class LatteParseErrorListener(ErrorListener):
     def reportAmbiguity(self, recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs):
         raise LatteParserError()
 
-    def reportAttemptingFullContext(self, recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs):
-        raise LatteParserError()
-
-    def reportContextSensitivity(self, recognizer, dfa, startIndex, stopIndex, prediction, configs):
-        raise LatteParserError()
-
 
 def parse_content(content):
     lexer = LatteLexer(content)
