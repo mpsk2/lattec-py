@@ -1,0 +1,2 @@
+include *.rst
+recursive-include lattec *.g4 *.interp *.tokens
