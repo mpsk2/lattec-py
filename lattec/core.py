@@ -7,7 +7,8 @@ from lattec.exceptions import LatteParserError
 from lattec.parser import parse_file
 
 __all__ = [
-    'main'
+    'main',
+    'main_f',
 ]
 
 arg_parser = argparse.ArgumentParser(description='Latte compiler', prog='lattec')
@@ -28,15 +29,19 @@ def cli():
     return args
 
 
+def main_f():
+    args = cli()
+
+    if args.verbose:
+        print(args)
+
+    parser = parse_file(args.path.name)
+    program_tree = parser.program()
+
+
 def main():
     try:
-        args = cli()
-
-        if args.verbose:
-            print(args)
-
-        parser = parse_file(args.path.name)
-        program_tree = parser.program()
+        main_f()
     except LatteParserError as ex:
         logging.error(str(ex))
         sys.exit(1)

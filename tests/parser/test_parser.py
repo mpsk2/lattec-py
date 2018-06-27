@@ -1,5 +1,4 @@
 import glob
-import os
 
 import pytest
 
@@ -20,7 +19,11 @@ def test_empty_no_finish():
         parser.program()
 
 
-@pytest.mark.parametrize("file_path", glob.iglob('tests/parser/good/**/*.lat', recursive=True))
+@pytest.mark.parametrize("file_path", glob.iglob('tests/parser/**/*.lat', recursive=True))
 def test_file(file_path):
     parser = parse_file(file_path)
-    parser.program()
+    if 'syntax' in file_path:
+        with pytest.raises(LatteSyntaxError):
+            parser.program()
+    else:
+        parser.program()
