@@ -1,0 +1,5 @@
+class Circle extends Shape {
+  void tellAgain() {
+    printString("I'm really a circle");
+  }
+}

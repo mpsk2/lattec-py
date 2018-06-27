@@ -1,0 +1,9 @@
+class Shape {
+  void tell () {
+    printString("I'm a shape");
+  }
+
+  void tellAgain() {
+     printString("I'm just a shape");
+  }
+}

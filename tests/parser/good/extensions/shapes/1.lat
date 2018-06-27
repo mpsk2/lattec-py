@@ -1,0 +1,22 @@
+class Stack {
+  Node head;
+
+  void push(Shape c) {
+    Node newHead = new Node;
+    newHead.setElem(c);
+    newHead.setNext(head);
+    head = newHead;
+  }
+
+  boolean isEmpty() {
+    return head==(Node)null;
+  }
+
+  Shape top() {
+    return head.getElem();
+  }
+
+  void pop() {
+    head = head.getNext();
+  }
+}

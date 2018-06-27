@@ -16,3 +16,4 @@ def test_empty_no_finish():
     with pytest.raises(LatteSyntaxError):
         parser.program()
 
+
