@@ -12,22 +12,21 @@ class LatteParserError(LatteError):
 
 class LatteSyntaxError(LatteParserError):
     def __init__(self, offending_symbol, line, column, message, *args, **kwargs):
-        super().__init__(message, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.offending_symbol = offending_symbol
         self.line = line
         self.column = column
+        self.message = message
 
     def __repr__(self):
-        return super().__repr__() + '{}, {}, {}, {}'.format(
-            repr(self.offending_symbol),
-            repr(self.line),
-            repr(self.column),
+        return 'Syntax error at line:column={}:{}\n{}'.format(
+            self.line,
+            self.column,
             repr(self.message),
         )
 
     def __str__(self):
-        return super().__str__() + '{}, {}, {}, {}'.format(
-            str(self.offending_symbol),
+        return 'Syntax error at line:column={}:{}\n{}'.format(
             self.line,
             self.column,
             self.message,

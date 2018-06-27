@@ -1,5 +1,10 @@
 import argparse
+import logging
+import sys
+
 from lattec import __version__
+from lattec.exceptions import LatteParserError
+from lattec.parser import parse_file
 
 __all__ = [
     'main'
@@ -24,4 +29,17 @@ def cli():
 
 
 def main():
-    arg = cli()
+    try:
+        args = cli()
+
+        if args.verbose:
+            print(args)
+
+        parser = parse_file(args.path.name)
+        program_tree = parser.program()
+    except LatteParserError as ex:
+        logging.error(str(ex))
+        sys.exit(1)
+    except Exception as ex:
+        logging.error('Unknown error')
+        raise
