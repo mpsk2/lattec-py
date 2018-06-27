@@ -1,6 +1,2 @@
-*
-!.gitignore
-!__init__.py
-!utils.py
+Latte*
 !Latte.g4
-
