@@ -36,4 +36,5 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Software Development :: Compilers',
     ],
+    scripts=['bin/lattec']
 )

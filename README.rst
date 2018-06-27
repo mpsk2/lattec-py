@@ -7,3 +7,4 @@ Latte Compiler
 
 .. image:: https://coveralls.io/repos/github/mpsk2/lattec-py/badge.svg?branch=master
     :target: https://coveralls.io/github/mpsk2/lattec-py?branch=master
+
