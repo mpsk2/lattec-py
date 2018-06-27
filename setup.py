@@ -13,13 +13,27 @@ tests_require = [
     'pytest-cov',
 ]
 
+pkg = __import__('lattec')
+
 setup(
     name='lattec',
-    version='0.1dev',
-    packages=setuptools.find_packages('src'),
-    package_dir={'':'src'},
+    author=pkg.__author__,
+    author_email=pkg.__author_email__,
+    version=pkg.__version__,
+    packages=setuptools.find_packages(),
     long_description=open('README.rst').read(),
     setup_requires=setup_requires,
     tests_require=tests_require,
+    classifiers=[
+        'Development Status :: 1 - Planning',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3 :: Only',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Topic :: Software Development :: Compilers',
+    ],
 )
-
