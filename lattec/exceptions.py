@@ -1,3 +1,8 @@
+import typing
+
+from validations.single_errors import Redeclaration, UndeclaredUse
+
+
 class LatteException(Exception):
     pass
 
@@ -31,3 +36,14 @@ class LatteSyntaxError(LatteParserError):
             self.column,
             self.message,
         )
+
+
+class LatteValidationError(LatteError):
+    pass
+
+
+class LatteVariableNamesError(LatteError):
+    def __init__(self, redeclarations: typing.List[Redeclaration], undeclared_uses: typing.List[UndeclaredUse], *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.redeclarations = redeclarations
+        self.undeclared_uses = undeclared_uses
