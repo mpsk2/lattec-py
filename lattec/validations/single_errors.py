@@ -16,3 +16,12 @@ class UndeclaredUse(namedtuple('undeclared_use', ['name', 'line'])):
             self.name,
             self.line
         )
+
+
+class TypeMissMatch(namedtuple('type_miss_match', ['t1', 't2', 'line'])):
+    def ___str___(self):
+        return 'got {}, expected {} at line {}'.format(
+            self.t1,
+            self.t2,
+            self.line,
+        )

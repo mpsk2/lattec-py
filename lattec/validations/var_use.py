@@ -10,6 +10,7 @@ from lattec.validations.types import *
 from lattec.validations.single_errors import (
     Redeclaration,
     UndeclaredUse,
+    TypeMissMatch,
 )
 
 
@@ -67,17 +68,17 @@ class State:
         self.ret_type = self.ret_type_stack[-1]
         self.ret_type_stack.pop()
 
-    def check_ret(self, t):
+    def check_ret(self, t, line):
         if t == self.ret_type:
             return
 
-        raise NotImplementedError(self.vars)
+        self.errors.append(TypeMissMatch(self.ret_type, t, line))
 
-    def cmp_type(self, t1, t2):
+    def cmp_type(self, t1, t2, line):
         if t1 == t2:
             return
 
-        raise NotImplementedError(self.vars)
+        self.errors.append(TypeMissMatch(t1, t2, line))
 
 
 class VarUseVisitor(BaseVisitor):
@@ -151,7 +152,10 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitIdentVec(self, ctx: Parser.IdentVecContext):
-        return self.visitChildren(ctx)
+        if len(ctx.ID()) > 1:
+            return self.visitChildren(ctx)
+
+        return self.state.use_var(ctx.ID()[0], ctx.start.line)
 
     def visitTNonArray(self, ctx: Parser.TNonArrayContext):
         return ctx.base_type().accept(self)
@@ -211,7 +215,11 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEMulOp(self, ctx: Parser.EMulOpContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.lhs.accept(self)
+        t2 = ctx.rhs.accept(self)
+
+        self.state.cmp_type(t1, t2, ctx.start.line)
+        self.state.cmp_type(t1, LatteInt(), ctx.start.line)
 
     def visitEAnd(self, ctx: Parser.EAndContext):
         return self.visitChildren(ctx)
@@ -226,7 +234,13 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEAddOp(self, ctx: Parser.EAddOpContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.lhs.accept(self)
+        t2 = ctx.rhs.accept(self)
+
+        self.state.cmp_type(t1, t2, ctx.start.line)
+
+        if t1.__class__ not in [LatteInt, LatteString]:
+            self.state.cmp_type(t1, LatteInt(), ctx.start.line)
 
     def visitEAcc(self, ctx: Parser.EAccContext):
         return self.visitChildren(ctx)
@@ -325,7 +339,13 @@ class VarUseListener(BaseListener):
             item.enterRule(self)
 
     def enterAss(self, ctx: Parser.AssContext):
-        raise NotImplementedError()
+        if ctx.arrAcc():
+            raise NotImplementedError()
+
+        t1 = ctx.identVec().accept(self.visitor)
+        t2 = ctx.expr().accept(self.visitor)
+
+        self.state.cmp_type(t1, t2, ctx.start.line)
 
     def enterIncr(self, ctx: Parser.IncrContext):
         raise NotImplementedError()
@@ -335,14 +355,14 @@ class VarUseListener(BaseListener):
 
     def enterRet(self, ctx: Parser.RetContext):
         t = ctx.expr().accept(self.visitor)
-        self.state.check_ret(t)
+        self.state.check_ret(t, ctx.start.line)
 
     def enterVRet(self, ctx: Parser.VRetContext):
-        self.state.check_ret(LatteVoid())
+        self.state.check_ret(LatteVoid(), ctx.start.line)
 
     def enterCond(self, ctx: Parser.CondContext):
         t = ctx.cond.accept(self.visitor)
-        self.state.cmp_type(t, LatteBool())
+        self.state.cmp_type(t, LatteBool(), ctx.start.line)
 
         self.state.level_up()
         ctx.true_stmt.enterRule(self)
@@ -350,7 +370,7 @@ class VarUseListener(BaseListener):
 
     def enterCondElse(self, ctx: Parser.CondElseContext):
         t = ctx.cond.accept(self.visitor)
-        self.state.cmp_type(t, LatteBool())
+        self.state.cmp_type(t, LatteBool(), ctx.start.line)
 
         self.state.level_up()
         ctx.true_stmt.enterRule(self)
@@ -363,7 +383,7 @@ class VarUseListener(BaseListener):
 
     def enterWhile(self, ctx: Parser.WhileContext):
         t = ctx.cond.accept(self.visitor)
-        self.state.cmp_type(t, LatteBool())
+        self.state.cmp_type(t, LatteBool(), ctx.start.line)
 
         self.state.level_up()
         ctx.true_stmt.enterRule(self)
@@ -414,7 +434,7 @@ class VarUseListener(BaseListener):
 
         if ctx.expr() is not None:
             expr_t = ctx.expr().accept(self.visitor)
-            self.state.cmp_type(t, expr_t)
+            self.state.cmp_type(t, expr_t, ctx.start.line)
 
         self.state.add_var(ctx.name, t, ctx.start.line)
 

@@ -41,6 +41,15 @@ PROGRAMS = (
         }
     }
     ''',
+    '''
+    void a() {
+        int f, b, c, d;
+        f = 1;
+        b = 2;
+        c = 3;
+        d = b + c * f;
+    }
+    ''',
 )
 
 
