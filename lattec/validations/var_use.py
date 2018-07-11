@@ -1,3 +1,5 @@
+from itertools import zip_longest
+
 from antlr4.Token import CommonToken
 from antlr4.tree.Tree import TerminalNodeImpl
 
@@ -17,7 +19,10 @@ from lattec.validations.single_errors import (
 class State:
     def __init__(self):
         self.level = 0
-        self.vars = {}
+        self.vars = {
+            k: (-1, -1, v)
+            for k, v in INITIAL_FEED.items()
+        }
         self.errors = []
         self.vars_stack = []
         self.ret_type = LatteVoid()
@@ -191,10 +196,26 @@ class VarUseVisitor(BaseVisitor):
         return self.state.use_var(ctx.ID(), ctx.start.line)
 
     def visitEFunCall(self, ctx: Parser.EFunCallContext):
-        return self.visitChildren(ctx)
+        t = self.state.use_var(ctx.name, ctx.start.line)
+
+        args = [
+            arg.accept(self)
+            for arg in ctx.expr()
+        ]
+
+        for expected, got, arg in zip_longest(t.args, args, ctx.expr()):
+            self.state.cmp_type(expected, got, arg.start.line)
+
+        return t.ret
 
     def visitERelOp(self, ctx: Parser.ERelOpContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.lhs.accept(self)
+        t2 = ctx.rhs.accept(self)
+
+        # TODO: cmp strings?
+        self.state.cmp_type(t1, t2, ctx.start.line)
+
+        return t1
 
     def visitETrue(self, ctx: Parser.ETrueContext):
         return LatteBool()
@@ -203,16 +224,29 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEOr(self, ctx: Parser.EOrContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.lhs.accept(self)
+        t2 = ctx.rhs.accept(self)
+
+        self.state.cmp_type(LatteBool(), t1, ctx.lhs.start.line)
+        self.state.cmp_type(LatteBool(), t2, ctx.rhs.start.line)
 
     def visitEInt(self, ctx: Parser.EIntContext):
         return LatteInt()
 
     def visitEUnOp(self, ctx: Parser.EUnOpContext):
-        return self.visitChildren(ctx)
+        t = ctx.expr().accept(self)
+
+        if ctx.NOT() is not None:
+            self.state.cmp_type(LatteBool(), t, ctx.start.line)
+        elif ctx.SUB() is not None:
+            self.state.cmp_type(LatteInt(), t, ctx.start.line)
+        else:
+            raise NotImplementedError()
+
+        return t
 
     def visitEStr(self, ctx: Parser.EStrContext):
-        return self.visitChildren(ctx)
+        return LatteString()
 
     def visitEMulOp(self, ctx: Parser.EMulOpContext):
         t1 = ctx.lhs.accept(self)
@@ -222,10 +256,14 @@ class VarUseVisitor(BaseVisitor):
         self.state.cmp_type(t1, LatteInt(), ctx.start.line)
 
     def visitEAnd(self, ctx: Parser.EAndContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.lhs.accept(self)
+        t2 = ctx.rhs.accept(self)
+
+        self.state.cmp_type(LatteBool(), t1, ctx.lhs.start.line)
+        self.state.cmp_type(LatteBool(), t2, ctx.rhs.start.line)
 
     def visitEParen(self, ctx: Parser.EParenContext):
-        return self.visitChildren(ctx)
+        return ctx.expr().accept(self)
 
     def visitEFalse(self, ctx: Parser.EFalseContext):
         return LatteBool()
@@ -348,10 +386,12 @@ class VarUseListener(BaseListener):
         self.state.cmp_type(t1, t2, ctx.start.line)
 
     def enterIncr(self, ctx: Parser.IncrContext):
-        raise NotImplementedError()
+        t = self.state.use_var(ctx.name, ctx.start.line)
+        self.state.cmp_type(LatteInt(), t, ctx.start.line)
 
     def enterDecr(self, ctx: Parser.DecrContext):
-        raise NotImplementedError()
+        t = self.state.use_var(ctx.name, ctx.start.line)
+        self.state.cmp_type(LatteInt(), t, ctx.start.line)
 
     def enterRet(self, ctx: Parser.RetContext):
         t = ctx.expr().accept(self.visitor)
@@ -393,7 +433,7 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterSExp(self, ctx: Parser.SExpContext):
-        raise NotImplementedError()
+        ctx.expr().accept(self.visitor)
 
     def enterArrAcc(self, ctx: Parser.ArrAccContext):
         raise NotImplementedError()

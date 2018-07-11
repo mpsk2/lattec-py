@@ -1,6 +1,11 @@
+import glob
+
 import pytest
 
-from lattec.parser import parse_str
+from lattec.parser import (
+    parse_file,
+    parse_str,
+)
 from lattec.validations.var_use import VarUseListener
 
 PROGRAMS = (
@@ -59,3 +64,11 @@ def test_var_use(code):
     program = parser.program()
     listener = VarUseListener()
     program.enterRule(listener)
+
+
+@pytest.mark.parametrize("file_path", glob.iglob('tests/parser/good/core/*.lat', recursive=True))
+def test_good_core_files(file_path):
+    parser = parse_file(file_path)
+    propgram = parser.program()
+    listener = VarUseListener()
+    propgram.enterRule(listener)
