@@ -55,6 +55,12 @@ class State:
 
         raise NotImplementedError()
 
+    def cmp_type(self, t1, t2):
+        if t1 == t2:
+            return
+
+        raise NotImplementedError()
+
 
 class VarUseVisitor(BaseVisitor):
     def __init__(self, state):
@@ -297,7 +303,8 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterDecl(self, ctx: Parser.DeclContext):
-        raise NotImplementedError()
+        for item in ctx.item():
+            item.enterRule(self)
 
     def enterAss(self, ctx: Parser.AssContext):
         raise NotImplementedError()
@@ -364,7 +371,14 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterItem(self, ctx: Parser.ItemContext):
-        raise NotImplementedError()
+        # ugly
+        t = ctx.parentCtx.type_().accept(self.visitor)
+
+        if ctx.expr() is not None:
+            expr_t = ctx.expr().accept(self.visitor)
+            self.state.cmp_type(t, expr_t)
+
+        self.state.add_var(ctx.name, t, ctx.start.line)
 
     def enterEId(self, ctx: Parser.EIdContext):
         raise NotImplementedError()

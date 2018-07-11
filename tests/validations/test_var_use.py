@@ -9,6 +9,12 @@ PROGRAMS = (
     'int a() { return 1; }',
     'boolean b() { return true; }',
     'boolean b() { return false; }',
+    '''
+    void a() {
+        int b, c, d;
+        int e = 4;
+    }
+    '''
 )
 
 
