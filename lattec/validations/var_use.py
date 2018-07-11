@@ -49,11 +49,16 @@ class State:
         self.ret_type = self.ret_type_stack[-1]
         self.ret_type_stack.pop()
 
+    def check_ret(self, t):
+        if t == self.ret_type:
+            return
+
+        raise NotImplementedError()
+
 
 class VarUseVisitor(BaseVisitor):
     def __init__(self, state):
         self.state = state
-
 
     def visitProgram(self, ctx: Parser.ProgramContext):
         return self.visitChildren(ctx)
@@ -65,10 +70,10 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitArgVec(self, ctx: Parser.ArgVecContext):
-        return self.visitChildren(ctx)
+        return [arg.accept(self) for arg in ctx.arg()]
 
     def visitArg(self, ctx: Parser.ArgContext):
-        return self.visitChildren(ctx)
+        return ctx.type_().accept(self)
 
     def visitBlock(self, ctx: Parser.BlockContext):
         return self.visitChildren(ctx)
@@ -264,10 +269,12 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterArgVec(self, ctx: Parser.ArgVecContext):
-        raise NotImplementedError()
+        for arg in ctx.arg():
+            arg.enterRule(self)
 
     def enterArg(self, ctx: Parser.ArgContext):
-        raise NotImplementedError()
+        t = ctx.accept(self.visitor)
+        self.state.add_var(ctx.name, t, ctx.start.line)
 
     def enterBlock(self, ctx: Parser.BlockContext):
         self.state.level_up()
@@ -305,7 +312,7 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterVRet(self, ctx: Parser.VRetContext):
-        raise NotImplementedError()
+        self.state.check_ret(LatteVoid())
 
     def enterCond(self, ctx: Parser.CondContext):
         raise NotImplementedError()

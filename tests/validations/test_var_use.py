@@ -3,9 +3,9 @@ import pytest
 from lattec.parser import parse_str
 from lattec.validations.var_use import VarUseListener
 
-
 PROGRAMS = (
-        'void main() { }',
+    'void main() { }',
+    'void main(int a, int b, int c) { return; }'
 )
 
 
