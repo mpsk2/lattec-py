@@ -115,45 +115,6 @@ class VarUseVisitor(BaseVisitor):
     def visitMethod(self, ctx: Parser.MethodContext):
         return self.visitChildren(ctx)
 
-    def visitEmpty(self, ctx: Parser.EmptyContext):
-        return self.visitChildren(ctx)
-
-    def visitBlockStmt(self, ctx: Parser.BlockStmtContext):
-        return self.visitChildren(ctx)
-
-    def visitDecl(self, ctx: Parser.DeclContext):
-        return self.visitChildren(ctx)
-
-    def visitAss(self, ctx: Parser.AssContext):
-        return self.visitChildren(ctx)
-
-    def visitIncr(self, ctx: Parser.IncrContext):
-        return self.visitChildren(ctx)
-
-    def visitDecr(self, ctx: Parser.DecrContext):
-        return self.visitChildren(ctx)
-
-    def visitRet(self, ctx: Parser.RetContext):
-        return self.visitChildren(ctx)
-
-    def visitVRet(self, ctx: Parser.VRetContext):
-        return self.visitChildren(ctx)
-
-    def visitCond(self, ctx: Parser.CondContext):
-        return self.visitChildren(ctx)
-
-    def visitCondElse(self, ctx: Parser.CondElseContext):
-        return self.visitChildren(ctx)
-
-    def visitWhile(self, ctx: Parser.WhileContext):
-        return self.visitChildren(ctx)
-
-    def visitForEach(self, ctx: Parser.ForEachContext):
-        return self.visitChildren(ctx)
-
-    def visitSExp(self, ctx: Parser.SExpContext):
-        return self.visitChildren(ctx)
-
     def visitArrAcc(self, ctx: Parser.ArrAccContext):
         return self.visitChildren(ctx)
 
