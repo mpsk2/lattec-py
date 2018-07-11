@@ -1,5 +1,0 @@
-class Rectangle extends Shape {
-  void tellAgain() {
-    printString("I'm really a rectangle");
-  }
-}
