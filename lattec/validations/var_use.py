@@ -3,6 +3,7 @@ from itertools import zip_longest
 from antlr4.Token import CommonToken
 from antlr4.tree.Tree import TerminalNodeImpl
 
+from lattec.exceptions import LatteVariableNamesError
 from lattec.parser import Parser
 from lattec.validations.base import (
     BaseListener,
@@ -215,7 +216,7 @@ class VarUseVisitor(BaseVisitor):
         # TODO: cmp strings?
         self.state.cmp_type(t1, t2, ctx.start.line)
 
-        return t1
+        return LatteBool()
 
     def visitETrue(self, ctx: Parser.ETrueContext):
         return LatteBool()
@@ -229,6 +230,8 @@ class VarUseVisitor(BaseVisitor):
 
         self.state.cmp_type(LatteBool(), t1, ctx.lhs.start.line)
         self.state.cmp_type(LatteBool(), t2, ctx.rhs.start.line)
+
+        return LatteBool()
 
     def visitEInt(self, ctx: Parser.EIntContext):
         return LatteInt()
@@ -255,12 +258,16 @@ class VarUseVisitor(BaseVisitor):
         self.state.cmp_type(t1, t2, ctx.start.line)
         self.state.cmp_type(t1, LatteInt(), ctx.start.line)
 
+        return LatteInt()
+
     def visitEAnd(self, ctx: Parser.EAndContext):
         t1 = ctx.lhs.accept(self)
         t2 = ctx.rhs.accept(self)
 
         self.state.cmp_type(LatteBool(), t1, ctx.lhs.start.line)
         self.state.cmp_type(LatteBool(), t2, ctx.rhs.start.line)
+
+        return LatteBool()
 
     def visitEParen(self, ctx: Parser.EParenContext):
         return ctx.expr().accept(self)
@@ -279,6 +286,8 @@ class VarUseVisitor(BaseVisitor):
 
         if t1.__class__ not in [LatteInt, LatteString]:
             self.state.cmp_type(t1, LatteInt(), ctx.start.line)
+
+        return t1
 
     def visitEAcc(self, ctx: Parser.EAccContext):
         return self.visitChildren(ctx)
@@ -299,7 +308,6 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
 
-
 class VarUseListener(BaseListener):
     def __init__(self):
         self.state = State()
@@ -307,7 +315,7 @@ class VarUseListener(BaseListener):
 
     def summarize(self):
         if self.state.errors:
-            raise NotImplementedError()
+            raise LatteVariableNamesError(self.state.errors)
 
     def enterProgram(self, ctx: Parser.ProgramContext):
         self.state.level_up()

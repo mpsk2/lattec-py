@@ -2,6 +2,7 @@ import glob
 
 import pytest
 
+from lattec.exceptions import LatteVariableNamesError
 from lattec.parser import (
     parse_file,
     parse_str,
@@ -57,6 +58,17 @@ PROGRAMS = (
     ''',
 )
 
+FAILING_TESTS = (
+    (
+        'returns int for void',
+        '''
+        void a() {
+            return 1;
+        }
+        '''
+    ),
+)
+
 
 @pytest.mark.parametrize('code', PROGRAMS)
 def test_var_use(code):
@@ -64,6 +76,7 @@ def test_var_use(code):
     program = parser.program()
     listener = VarUseListener()
     program.enterRule(listener)
+    listener.summarize()
 
 
 @pytest.mark.parametrize("file_path", glob.iglob('tests/parser/good/core/*.lat', recursive=True))
@@ -72,3 +85,14 @@ def test_good_core_files(file_path):
     propgram = parser.program()
     listener = VarUseListener()
     propgram.enterRule(listener)
+    listener.summarize()
+
+
+@pytest.mark.parametrize('name, code', FAILING_TESTS)
+def test_var_use_failing(name, code):
+    parser = parse_str(code)
+    program = parser.program()
+    listener = VarUseListener()
+    program.enterRule(listener)
+    with pytest.raises(LatteVariableNamesError):
+        listener.summarize()
