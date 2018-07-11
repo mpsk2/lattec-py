@@ -176,7 +176,7 @@ class BaseListener(Listener, metaclass=abc.ABCMeta):
 
 class BaseVisitor(Visitor):
     def visitChildren(self, node):
-        raise NotImplementedError('visitChildren')
+        raise NotImplementedError('visitChildren {}'.format(node.__class__.__name__))
 
     def visitProgram(self, ctx: Parser.ProgramContext):
         return self.visitChildren(ctx)
