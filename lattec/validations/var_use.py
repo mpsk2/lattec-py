@@ -128,7 +128,8 @@ class VarUseVisitor(BaseVisitor):
         return ctx.base_type().accept(self)
 
     def visitTArray(self, ctx: Parser.TArrayContext):
-        return self.visitChildren(ctx)
+        t = ctx.basic_type().accept(self)
+        return LatteArray(t)
 
     def visitTBasic(self, ctx: Parser.TBasicContext):
         return ctx.basic_type().accept(self)
@@ -148,7 +149,13 @@ class VarUseVisitor(BaseVisitor):
     def visitTVoid(self, ctx: Parser.TVoidContext):
         return LatteVoid()
 
-    def visitNew_expr_type(self, ctx: Parser.New_expr_typeContext):
+    def visitNewObj(self, ctx:Parser.NewObjContext):
+        return self.visitChildren(ctx)
+
+    def visitNewObjArray(self, ctx:Parser.NewObjArrayContext):
+        return self.visitChildren(ctx)
+
+    def visitNewBasicTypeArray(self, ctx:Parser.NewBasicTypeArrayContext):
         return self.visitChildren(ctx)
 
     def visitItem(self, ctx: Parser.ItemContext):
@@ -237,7 +244,7 @@ class VarUseVisitor(BaseVisitor):
         return LatteBool()
 
     def visitENew(self, ctx: Parser.ENewContext):
-        return self.visitChildren(ctx)
+        return ctx.new_expr_type().accept(self)
 
     def visitEAddOp(self, ctx: Parser.EAddOpContext):
         t1 = ctx.lhs.accept(self)
@@ -434,7 +441,13 @@ class VarUseListener(BaseListener):
     def enterTVoid(self, ctx: Parser.TVoidContext):
         raise NotImplementedError()
 
-    def enterNew_expr_type(self, ctx: Parser.New_expr_typeContext):
+    def enterNewObj(self, ctx:Parser.NewObjContext):
+        raise NotImplementedError()
+
+    def enterNewObjArray(self, ctx:Parser.NewObjArrayContext):
+        raise NotImplementedError()
+
+    def enterNewBasicTypeArray(self, ctx:Parser.NewBasicTypeArrayContext):
         raise NotImplementedError()
 
     def enterItem(self, ctx: Parser.ItemContext):

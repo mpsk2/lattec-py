@@ -5,8 +5,8 @@ program
     ;
 
 topDef
-    : type_ name=ID LPAREN argVec? RPAREN block           # FnDef
-    | CLS name=ID (EXTENDS supercls=ID)? LBRACE clsElem* RBRACE # ClsDef
+    : type_ name=ID LPAREN argVec? RPAREN block  # FnDef
+    | CLS name=ID LBRACE clsElem* RBRACE         # ClsDef
     ;
 
 argVec
@@ -61,8 +61,9 @@ basic_type
     ;
 
 new_expr_type
-    : ID ( LBRACK expr RBRACK)?
-    | basic_type ( LBRACK expr RBRACK)+
+    : class_name=ID                    # NewObj
+    | class_name=ID LBRACK expr RBRACK # NewObjArray
+    | basic_type (LBRACK expr RBRACK)+ # NewBasicTypeArray
     ;
 
 item
@@ -72,11 +73,11 @@ item
 
 expr
     : (SUB|NOT) expr                      # EUnOp
-    | lhs=expr mulOp rhs=expr                     # EMulOp
-    | lhs=expr addOp rhs=expr                     # EAddOp
-    | lhs=expr relOp rhs=expr                     # ERelOp
-    | <assoc=right> lhs=expr AND rhs=expr         # EAnd
-    | <assoc=right> lhs=expr OR rhs=expr          # EOr
+    | lhs=expr mulOp rhs=expr             # EMulOp
+    | lhs=expr addOp rhs=expr             # EAddOp
+    | lhs=expr relOp rhs=expr             # ERelOp
+    | <assoc=right> lhs=expr AND rhs=expr # EAnd
+    | <assoc=right> lhs=expr OR rhs=expr  # EOr
     | ID                                  # EId
     | NUMBER                              # EInt
     | TRUE                                # ETrue
@@ -160,7 +161,6 @@ TRUE    : 'true';
 FALSE   : 'false';
 
 CLS     : 'class';
-EXTENDS : 'extends';
 NEW     : 'new';
 NULL    : 'null';
 

@@ -56,6 +56,34 @@ PROGRAMS = (
         d = b + c * f;
     }
     ''',
+    '''
+    void declArray() {
+        int[] a;
+    }
+    ''',
+    '''
+    void initArray() {
+        int[] a = new int[10];
+    }
+    ''',
+    # '''
+    # void accessArrayLength() {
+    #     int[] a = new init[10];
+    #     int b = a.length;
+    # }
+    # ''',
+    # '''
+    # void assignArrayValue() {
+    #     int[] a = new int[10];
+    #     int a[5] = 1;
+    # }
+    # ''',
+    # '''
+    # void acceessArrayFieldValue() {
+    #     int[] a = new int[10];
+    #     int b = a[1] + a[3] + 5;
+    # }
+    # ''',
 )
 
 FAILING_TESTS = (

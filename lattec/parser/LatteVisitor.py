@@ -164,8 +164,18 @@ class LatteVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LatteParser#new_expr_type.
-    def visitNew_expr_type(self, ctx:LatteParser.New_expr_typeContext):
+    # Visit a parse tree produced by LatteParser#NewObj.
+    def visitNewObj(self, ctx:LatteParser.NewObjContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LatteParser#NewObjArray.
+    def visitNewObjArray(self, ctx:LatteParser.NewObjArrayContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LatteParser#NewBasicTypeArray.
+    def visitNewBasicTypeArray(self, ctx:LatteParser.NewBasicTypeArrayContext):
         return self.visitChildren(ctx)
 
 

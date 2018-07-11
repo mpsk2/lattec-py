@@ -287,12 +287,30 @@ class LatteListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LatteParser#new_expr_type.
-    def enterNew_expr_type(self, ctx:LatteParser.New_expr_typeContext):
+    # Enter a parse tree produced by LatteParser#NewObj.
+    def enterNewObj(self, ctx:LatteParser.NewObjContext):
         pass
 
-    # Exit a parse tree produced by LatteParser#new_expr_type.
-    def exitNew_expr_type(self, ctx:LatteParser.New_expr_typeContext):
+    # Exit a parse tree produced by LatteParser#NewObj.
+    def exitNewObj(self, ctx:LatteParser.NewObjContext):
+        pass
+
+
+    # Enter a parse tree produced by LatteParser#NewObjArray.
+    def enterNewObjArray(self, ctx:LatteParser.NewObjArrayContext):
+        pass
+
+    # Exit a parse tree produced by LatteParser#NewObjArray.
+    def exitNewObjArray(self, ctx:LatteParser.NewObjArrayContext):
+        pass
+
+
+    # Enter a parse tree produced by LatteParser#NewBasicTypeArray.
+    def enterNewBasicTypeArray(self, ctx:LatteParser.NewBasicTypeArrayContext):
+        pass
+
+    # Exit a parse tree produced by LatteParser#NewBasicTypeArray.
+    def exitNewBasicTypeArray(self, ctx:LatteParser.NewBasicTypeArrayContext):
         pass
 
 

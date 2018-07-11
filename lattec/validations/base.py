@@ -104,6 +104,15 @@ class BaseListener(Listener, metaclass=abc.ABCMeta):
     def enterTVoid(self, ctx: Parser.TVoidContext):
         raise NotImplementedError()
 
+    def enterNewObj(self, ctx: Parser.NewObjContext):
+        raise NotImplementedError()
+
+    def enterNewObjArray(self, ctx: Parser.NewObjArrayContext):
+        raise NotImplementedError()
+
+    def enterNewBasicTypeArray(self, ctx: Parser.NewBasicTypeArrayContext):
+        raise NotImplementedError()
+
     def enterNew_expr_type(self, ctx: Parser.New_expr_typeContext):
         raise NotImplementedError()
 
@@ -271,7 +280,13 @@ class BaseVisitor(Visitor):
     def visitTVoid(self, ctx: Parser.TVoidContext):
         return self.visitChildren(ctx)
 
-    def visitNew_expr_type(self, ctx: Parser.New_expr_typeContext):
+    def visitNewObj(self, ctx: Parser.NewObjContext):
+        return self.visitChildren(ctx)
+
+    def visitNewObjArray(self, ctx: Parser.NewObjArrayContext):
+        return self.visitChildren(ctx)
+
+    def visitNewBasicTypeArray(self, ctx: Parser.NewBasicTypeArrayContext):
         return self.visitChildren(ctx)
 
     def visitItem(self, ctx: Parser.ItemContext):
