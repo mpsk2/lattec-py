@@ -169,7 +169,7 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitETrue(self, ctx: Parser.ETrueContext):
-        return self.visitChildren(ctx)
+        return LatteBool()
 
     def visitECast(self, ctx: Parser.ECastContext):
         return self.visitChildren(ctx)
@@ -178,7 +178,7 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEInt(self, ctx: Parser.EIntContext):
-        return self.visitChildren(ctx)
+        return LatteInt()
 
     def visitEUnOp(self, ctx: Parser.EUnOpContext):
         return self.visitChildren(ctx)
@@ -196,7 +196,7 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEFalse(self, ctx: Parser.EFalseContext):
-        return self.visitChildren(ctx)
+        return LatteBool()
 
     def visitENew(self, ctx: Parser.ENewContext):
         return self.visitChildren(ctx)
@@ -309,7 +309,8 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterRet(self, ctx: Parser.RetContext):
-        raise NotImplementedError()
+        t = ctx.expr().accept(self.visitor)
+        self.state.check_ret(t)
 
     def enterVRet(self, ctx: Parser.VRetContext):
         self.state.check_ret(LatteVoid())

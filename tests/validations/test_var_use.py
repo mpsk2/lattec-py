@@ -5,7 +5,10 @@ from lattec.validations.var_use import VarUseListener
 
 PROGRAMS = (
     'void main() { }',
-    'void main(int a, int b, int c) { return; }'
+    'void main(int a, int b, int c) { return; }',
+    'int a() { return 1; }',
+    'boolean b() { return true; }',
+    'boolean b() { return false; }',
 )
 
 
