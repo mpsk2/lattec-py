@@ -261,9 +261,6 @@ class VarUseVisitor(BaseVisitor):
 
         self.state.cmp_type(LatteInt(), t2, ctx.expr()[1].start.line)
 
-        if not isinstance(t1, LatteArray):
-            raise NotImplementedError((t1, ctx.getText(), ctx.expr()[0].getText(), ctx.expr()[1].getText()))
-
         return t1.t
 
     def visitAddOp(self, ctx: Parser.AddOpContext):

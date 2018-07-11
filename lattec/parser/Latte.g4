@@ -69,7 +69,10 @@ item
     ;
 
 expr
-    : (SUB|NOT) expr                                     # EUnOp
+    : expr DOT expr                                      # EAcc
+    | NEW new_expr_type                                  # ENew
+    | expr LBRACK expr RBRACK                            # EAccArr
+    | (SUB|NOT) expr                                     # EUnOp
     | lhs=expr mulOp rhs=expr                            # EMulOp
     | lhs=expr addOp rhs=expr                            # EAddOp
     | lhs=expr relOp rhs=expr                            # ERelOp
@@ -80,9 +83,6 @@ expr
     | TRUE                                               # ETrue
     | FALSE                                              # EFalse
     | NULL                                               # ENull
-    | NEW new_expr_type                                  # ENew
-    | <assoc=right> expr DOT expr                        # EAcc
-    | <assoc=right> expr LBRACK expr RBRACK # EAccArr
     | name=ID LPAREN ( expr ( COMMA expr )* )? RPAREN    # EFunCall
     | LPAREN ID RPAREN expr                              # ECast
     | STRING                                             # EStr

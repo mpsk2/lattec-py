@@ -91,41 +91,41 @@ def serializedATN():
         buf.write("\2\2\u00bc\u00c1\7/\2\2\u00bd\u00be\7/\2\2\u00be\u00bf")
         buf.write("\7!\2\2\u00bf\u00c1\5\32\16\2\u00c0\u00bc\3\2\2\2\u00c0")
         buf.write("\u00bd\3\2\2\2\u00c1\31\3\2\2\2\u00c2\u00c3\b\16\1\2\u00c3")
-        buf.write("\u00c4\t\2\2\2\u00c4\u00e3\5\32\16\24\u00c5\u00e3\7/\2")
-        buf.write("\2\u00c6\u00e3\7.\2\2\u00c7\u00e3\7)\2\2\u00c8\u00e3\7")
-        buf.write("*\2\2\u00c9\u00e3\7-\2\2\u00ca\u00cb\7,\2\2\u00cb\u00e3")
-        buf.write("\5\26\f\2\u00cc\u00cd\7/\2\2\u00cd\u00d6\7\t\2\2\u00ce")
-        buf.write("\u00d3\5\32\16\2\u00cf\u00d0\7\r\2\2\u00d0\u00d2\5\32")
-        buf.write("\16\2\u00d1\u00cf\3\2\2\2\u00d2\u00d5\3\2\2\2\u00d3\u00d1")
-        buf.write("\3\2\2\2\u00d3\u00d4\3\2\2\2\u00d4\u00d7\3\2\2\2\u00d5")
-        buf.write("\u00d3\3\2\2\2\u00d6\u00ce\3\2\2\2\u00d6\u00d7\3\2\2\2")
-        buf.write("\u00d7\u00d8\3\2\2\2\u00d8\u00e3\7\f\2\2\u00d9\u00da\7")
-        buf.write("\t\2\2\u00da\u00db\7/\2\2\u00db\u00dc\7\f\2\2\u00dc\u00e3")
-        buf.write("\5\32\16\5\u00dd\u00e3\7\61\2\2\u00de\u00df\7\t\2\2\u00df")
-        buf.write("\u00e0\5\32\16\2\u00e0\u00e1\7\f\2\2\u00e1\u00e3\3\2\2")
-        buf.write("\2\u00e2\u00c2\3\2\2\2\u00e2\u00c5\3\2\2\2\u00e2\u00c6")
-        buf.write("\3\2\2\2\u00e2\u00c7\3\2\2\2\u00e2\u00c8\3\2\2\2\u00e2")
-        buf.write("\u00c9\3\2\2\2\u00e2\u00ca\3\2\2\2\u00e2\u00cc\3\2\2\2")
-        buf.write("\u00e2\u00d9\3\2\2\2\u00e2\u00dd\3\2\2\2\u00e2\u00de\3")
-        buf.write("\2\2\2\u00e3\u0100\3\2\2\2\u00e4\u00e5\f\23\2\2\u00e5")
-        buf.write("\u00e6\5\36\20\2\u00e6\u00e7\5\32\16\24\u00e7\u00ff\3")
-        buf.write("\2\2\2\u00e8\u00e9\f\22\2\2\u00e9\u00ea\5\34\17\2\u00ea")
-        buf.write("\u00eb\5\32\16\23\u00eb\u00ff\3\2\2\2\u00ec\u00ed\f\21")
-        buf.write("\2\2\u00ed\u00ee\5 \21\2\u00ee\u00ef\5\32\16\22\u00ef")
-        buf.write("\u00ff\3\2\2\2\u00f0\u00f1\f\20\2\2\u00f1\u00f2\7\23\2")
-        buf.write("\2\u00f2\u00ff\5\32\16\20\u00f3\u00f4\f\17\2\2\u00f4\u00f5")
-        buf.write("\7\24\2\2\u00f5\u00ff\5\32\16\17\u00f6\u00f7\f\b\2\2\u00f7")
-        buf.write("\u00f8\7\16\2\2\u00f8\u00ff\5\32\16\b\u00f9\u00fa\f\7")
-        buf.write("\2\2\u00fa\u00fb\7\b\2\2\u00fb\u00fc\5\32\16\2\u00fc\u00fd")
-        buf.write("\7\13\2\2\u00fd\u00ff\3\2\2\2\u00fe\u00e4\3\2\2\2\u00fe")
-        buf.write("\u00e8\3\2\2\2\u00fe\u00ec\3\2\2\2\u00fe\u00f0\3\2\2\2")
-        buf.write("\u00fe\u00f3\3\2\2\2\u00fe\u00f6\3\2\2\2\u00fe\u00f9\3")
-        buf.write("\2\2\2\u00ff\u0102\3\2\2\2\u0100\u00fe\3\2\2\2\u0100\u0101")
-        buf.write("\3\2\2\2\u0101\33\3\2\2\2\u0102\u0100\3\2\2\2\u0103\u0104")
-        buf.write("\t\3\2\2\u0104\35\3\2\2\2\u0105\u0106\t\4\2\2\u0106\37")
-        buf.write("\3\2\2\2\u0107\u0108\t\5\2\2\u0108!\3\2\2\2\27%+\66:A")
-        buf.write("KU_\u0095\u009d\u009f\u00a3\u00a9\u00b8\u00ba\u00c0\u00d3")
-        buf.write("\u00d6\u00e2\u00fe\u0100")
+        buf.write("\u00c4\7,\2\2\u00c4\u00e3\5\26\f\2\u00c5\u00c6\t\2\2\2")
+        buf.write("\u00c6\u00e3\5\32\16\21\u00c7\u00e3\7/\2\2\u00c8\u00e3")
+        buf.write("\7.\2\2\u00c9\u00e3\7)\2\2\u00ca\u00e3\7*\2\2\u00cb\u00e3")
+        buf.write("\7-\2\2\u00cc\u00cd\7/\2\2\u00cd\u00d6\7\t\2\2\u00ce\u00d3")
+        buf.write("\5\32\16\2\u00cf\u00d0\7\r\2\2\u00d0\u00d2\5\32\16\2\u00d1")
+        buf.write("\u00cf\3\2\2\2\u00d2\u00d5\3\2\2\2\u00d3\u00d1\3\2\2\2")
+        buf.write("\u00d3\u00d4\3\2\2\2\u00d4\u00d7\3\2\2\2\u00d5\u00d3\3")
+        buf.write("\2\2\2\u00d6\u00ce\3\2\2\2\u00d6\u00d7\3\2\2\2\u00d7\u00d8")
+        buf.write("\3\2\2\2\u00d8\u00e3\7\f\2\2\u00d9\u00da\7\t\2\2\u00da")
+        buf.write("\u00db\7/\2\2\u00db\u00dc\7\f\2\2\u00dc\u00e3\5\32\16")
+        buf.write("\5\u00dd\u00e3\7\61\2\2\u00de\u00df\7\t\2\2\u00df\u00e0")
+        buf.write("\5\32\16\2\u00e0\u00e1\7\f\2\2\u00e1\u00e3\3\2\2\2\u00e2")
+        buf.write("\u00c2\3\2\2\2\u00e2\u00c5\3\2\2\2\u00e2\u00c7\3\2\2\2")
+        buf.write("\u00e2\u00c8\3\2\2\2\u00e2\u00c9\3\2\2\2\u00e2\u00ca\3")
+        buf.write("\2\2\2\u00e2\u00cb\3\2\2\2\u00e2\u00cc\3\2\2\2\u00e2\u00d9")
+        buf.write("\3\2\2\2\u00e2\u00dd\3\2\2\2\u00e2\u00de\3\2\2\2\u00e3")
+        buf.write("\u0100\3\2\2\2\u00e4\u00e5\f\24\2\2\u00e5\u00e6\7\16\2")
+        buf.write("\2\u00e6\u00ff\5\32\16\25\u00e7\u00e8\f\20\2\2\u00e8\u00e9")
+        buf.write("\5\36\20\2\u00e9\u00ea\5\32\16\21\u00ea\u00ff\3\2\2\2")
+        buf.write("\u00eb\u00ec\f\17\2\2\u00ec\u00ed\5\34\17\2\u00ed\u00ee")
+        buf.write("\5\32\16\20\u00ee\u00ff\3\2\2\2\u00ef\u00f0\f\16\2\2\u00f0")
+        buf.write("\u00f1\5 \21\2\u00f1\u00f2\5\32\16\17\u00f2\u00ff\3\2")
+        buf.write("\2\2\u00f3\u00f4\f\r\2\2\u00f4\u00f5\7\23\2\2\u00f5\u00ff")
+        buf.write("\5\32\16\r\u00f6\u00f7\f\f\2\2\u00f7\u00f8\7\24\2\2\u00f8")
+        buf.write("\u00ff\5\32\16\f\u00f9\u00fa\f\22\2\2\u00fa\u00fb\7\b")
+        buf.write("\2\2\u00fb\u00fc\5\32\16\2\u00fc\u00fd\7\13\2\2\u00fd")
+        buf.write("\u00ff\3\2\2\2\u00fe\u00e4\3\2\2\2\u00fe\u00e7\3\2\2\2")
+        buf.write("\u00fe\u00eb\3\2\2\2\u00fe\u00ef\3\2\2\2\u00fe\u00f3\3")
+        buf.write("\2\2\2\u00fe\u00f6\3\2\2\2\u00fe\u00f9\3\2\2\2\u00ff\u0102")
+        buf.write("\3\2\2\2\u0100\u00fe\3\2\2\2\u0100\u0101\3\2\2\2\u0101")
+        buf.write("\33\3\2\2\2\u0102\u0100\3\2\2\2\u0103\u0104\t\3\2\2\u0104")
+        buf.write("\35\3\2\2\2\u0105\u0106\t\4\2\2\u0106\37\3\2\2\2\u0107")
+        buf.write("\u0108\t\5\2\2\u0108!\3\2\2\2\27%+\66:AKU_\u0095\u009d")
+        buf.write("\u009f\u00a3\u00a9\u00b8\u00ba\u00c0\u00d3\u00d6\u00e2")
+        buf.write("\u00fe\u0100")
         return buf.getvalue()
 
 
@@ -2410,6 +2410,36 @@ class LatteParser ( Parser ):
                 return visitor.visitChildren(self)
 
 
+    class EAccContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(LatteParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(LatteParser.ExprContext,i)
+
+        def DOT(self):
+            return self.getToken(LatteParser.DOT, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterEAcc" ):
+                listener.enterEAcc(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitEAcc" ):
+                listener.exitEAcc(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitEAcc" ):
+                return visitor.visitEAcc(self)
+            else:
+                return visitor.visitChildren(self)
+
+
     class EAddOpContext(ExprContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.ExprContext
@@ -2439,36 +2469,6 @@ class LatteParser ( Parser ):
         def accept(self, visitor:ParseTreeVisitor):
             if hasattr( visitor, "visitEAddOp" ):
                 return visitor.visitEAddOp(self)
-            else:
-                return visitor.visitChildren(self)
-
-
-    class EAccContext(ExprContext):
-
-        def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.ExprContext
-            super().__init__(parser)
-            self.copyFrom(ctx)
-
-        def expr(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(LatteParser.ExprContext)
-            else:
-                return self.getTypedRuleContext(LatteParser.ExprContext,i)
-
-        def DOT(self):
-            return self.getToken(LatteParser.DOT, 0)
-
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterEAcc" ):
-                listener.enterEAcc(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitEAcc" ):
-                listener.exitEAcc(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitEAcc" ):
-                return visitor.visitEAcc(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -2544,69 +2544,69 @@ class LatteParser ( Parser ):
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,18,self._ctx)
             if la_ == 1:
-                localctx = LatteParser.EUnOpContext(self, localctx)
+                localctx = LatteParser.ENewContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
 
                 self.state = 193
+                self.match(LatteParser.NEW)
+                self.state = 194
+                self.new_expr_type()
+                pass
+
+            elif la_ == 2:
+                localctx = LatteParser.EUnOpContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 195
                 _la = self._input.LA(1)
                 if not(_la==LatteParser.SUB or _la==LatteParser.NOT):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 194
-                self.expr(18)
-                pass
-
-            elif la_ == 2:
-                localctx = LatteParser.EIdContext(self, localctx)
-                self._ctx = localctx
-                _prevctx = localctx
-                self.state = 195
-                self.match(LatteParser.ID)
+                self.state = 196
+                self.expr(15)
                 pass
 
             elif la_ == 3:
-                localctx = LatteParser.EIntContext(self, localctx)
-                self._ctx = localctx
-                _prevctx = localctx
-                self.state = 196
-                self.match(LatteParser.NUMBER)
-                pass
-
-            elif la_ == 4:
-                localctx = LatteParser.ETrueContext(self, localctx)
+                localctx = LatteParser.EIdContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 197
-                self.match(LatteParser.TRUE)
+                self.match(LatteParser.ID)
                 pass
 
-            elif la_ == 5:
-                localctx = LatteParser.EFalseContext(self, localctx)
+            elif la_ == 4:
+                localctx = LatteParser.EIntContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 198
-                self.match(LatteParser.FALSE)
+                self.match(LatteParser.NUMBER)
                 pass
 
-            elif la_ == 6:
-                localctx = LatteParser.ENullContext(self, localctx)
+            elif la_ == 5:
+                localctx = LatteParser.ETrueContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 199
-                self.match(LatteParser.NULL)
+                self.match(LatteParser.TRUE)
                 pass
 
-            elif la_ == 7:
-                localctx = LatteParser.ENewContext(self, localctx)
+            elif la_ == 6:
+                localctx = LatteParser.EFalseContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 200
-                self.match(LatteParser.NEW)
+                self.match(LatteParser.FALSE)
+                pass
+
+            elif la_ == 7:
+                localctx = LatteParser.ENullContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 201
-                self.new_expr_type()
+                self.match(LatteParser.NULL)
                 pass
 
             elif la_ == 8:
@@ -2689,95 +2689,95 @@ class LatteParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,19,self._ctx)
                     if la_ == 1:
-                        localctx = LatteParser.EMulOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
-                        localctx.lhs = _prevctx
+                        localctx = LatteParser.EAccContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 226
-                        if not self.precpred(self._ctx, 17):
+                        if not self.precpred(self._ctx, 18):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 17)")
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 18)")
                         self.state = 227
-                        self.mulOp()
+                        self.match(LatteParser.DOT)
                         self.state = 228
-                        localctx.rhs = self.expr(18)
+                        self.expr(19)
                         pass
 
                     elif la_ == 2:
-                        localctx = LatteParser.EAddOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx = LatteParser.EMulOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
                         localctx.lhs = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 230
-                        if not self.precpred(self._ctx, 16):
-                            from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 16)")
-                        self.state = 231
-                        self.addOp()
-                        self.state = 232
-                        localctx.rhs = self.expr(17)
-                        pass
-
-                    elif la_ == 3:
-                        localctx = LatteParser.ERelOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
-                        localctx.lhs = _prevctx
-                        self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 234
-                        if not self.precpred(self._ctx, 15):
-                            from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 15)")
-                        self.state = 235
-                        self.relOp()
-                        self.state = 236
-                        localctx.rhs = self.expr(16)
-                        pass
-
-                    elif la_ == 4:
-                        localctx = LatteParser.EAndContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
-                        localctx.lhs = _prevctx
-                        self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 238
+                        self.state = 229
                         if not self.precpred(self._ctx, 14):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 14)")
-                        self.state = 239
-                        self.match(LatteParser.AND)
-                        self.state = 240
-                        localctx.rhs = self.expr(14)
+                        self.state = 230
+                        self.mulOp()
+                        self.state = 231
+                        localctx.rhs = self.expr(15)
                         pass
 
-                    elif la_ == 5:
-                        localctx = LatteParser.EOrContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                    elif la_ == 3:
+                        localctx = LatteParser.EAddOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
                         localctx.lhs = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 241
+                        self.state = 233
                         if not self.precpred(self._ctx, 13):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 13)")
-                        self.state = 242
-                        self.match(LatteParser.OR)
-                        self.state = 243
+                        self.state = 234
+                        self.addOp()
+                        self.state = 235
+                        localctx.rhs = self.expr(14)
+                        pass
+
+                    elif la_ == 4:
+                        localctx = LatteParser.ERelOpContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx.lhs = _prevctx
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
+                        self.state = 237
+                        if not self.precpred(self._ctx, 12):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 12)")
+                        self.state = 238
+                        self.relOp()
+                        self.state = 239
                         localctx.rhs = self.expr(13)
                         pass
 
+                    elif la_ == 5:
+                        localctx = LatteParser.EAndContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx.lhs = _prevctx
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
+                        self.state = 241
+                        if not self.precpred(self._ctx, 11):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 11)")
+                        self.state = 242
+                        self.match(LatteParser.AND)
+                        self.state = 243
+                        localctx.rhs = self.expr(11)
+                        pass
+
                     elif la_ == 6:
-                        localctx = LatteParser.EAccContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx = LatteParser.EOrContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx.lhs = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 244
-                        if not self.precpred(self._ctx, 6):
+                        if not self.precpred(self._ctx, 10):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 10)")
                         self.state = 245
-                        self.match(LatteParser.DOT)
+                        self.match(LatteParser.OR)
                         self.state = 246
-                        self.expr(6)
+                        localctx.rhs = self.expr(10)
                         pass
 
                     elif la_ == 7:
                         localctx = LatteParser.EAccArrContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 247
-                        if not self.precpred(self._ctx, 5):
+                        if not self.precpred(self._ctx, 16):
                             from antlr4.error.Errors import FailedPredicateException
-                            raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 16)")
                         self.state = 248
                         self.match(LatteParser.LBRACK)
                         self.state = 249
@@ -2990,31 +2990,31 @@ class LatteParser ( Parser ):
 
     def expr_sempred(self, localctx:ExprContext, predIndex:int):
             if predIndex == 0:
-                return self.precpred(self._ctx, 17)
+                return self.precpred(self._ctx, 18)
          
 
             if predIndex == 1:
-                return self.precpred(self._ctx, 16)
-         
-
-            if predIndex == 2:
-                return self.precpred(self._ctx, 15)
-         
-
-            if predIndex == 3:
                 return self.precpred(self._ctx, 14)
          
 
-            if predIndex == 4:
+            if predIndex == 2:
                 return self.precpred(self._ctx, 13)
          
 
+            if predIndex == 3:
+                return self.precpred(self._ctx, 12)
+         
+
+            if predIndex == 4:
+                return self.precpred(self._ctx, 11)
+         
+
             if predIndex == 5:
-                return self.precpred(self._ctx, 6)
+                return self.precpred(self._ctx, 10)
          
 
             if predIndex == 6:
-                return self.precpred(self._ctx, 5)
+                return self.precpred(self._ctx, 16)
          
 
 

@@ -431,21 +431,21 @@ class LatteListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LatteParser#EAddOp.
-    def enterEAddOp(self, ctx:LatteParser.EAddOpContext):
-        pass
-
-    # Exit a parse tree produced by LatteParser#EAddOp.
-    def exitEAddOp(self, ctx:LatteParser.EAddOpContext):
-        pass
-
-
     # Enter a parse tree produced by LatteParser#EAcc.
     def enterEAcc(self, ctx:LatteParser.EAccContext):
         pass
 
     # Exit a parse tree produced by LatteParser#EAcc.
     def exitEAcc(self, ctx:LatteParser.EAccContext):
+        pass
+
+
+    # Enter a parse tree produced by LatteParser#EAddOp.
+    def enterEAddOp(self, ctx:LatteParser.EAddOpContext):
+        pass
+
+    # Exit a parse tree produced by LatteParser#EAddOp.
+    def exitEAddOp(self, ctx:LatteParser.EAddOpContext):
         pass
 
 

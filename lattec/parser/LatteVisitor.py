@@ -244,13 +244,13 @@ class LatteVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LatteParser#EAddOp.
-    def visitEAddOp(self, ctx:LatteParser.EAddOpContext):
+    # Visit a parse tree produced by LatteParser#EAcc.
+    def visitEAcc(self, ctx:LatteParser.EAccContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LatteParser#EAcc.
-    def visitEAcc(self, ctx:LatteParser.EAccContext):
+    # Visit a parse tree produced by LatteParser#EAddOp.
+    def visitEAddOp(self, ctx:LatteParser.EAddOpContext):
         return self.visitChildren(ctx)
 
 
