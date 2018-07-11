@@ -14,7 +14,33 @@ PROGRAMS = (
         int b, c, d;
         int e = 4;
     }
+    ''',
     '''
+    void b() {
+        boolean a;
+        if (a) {
+            return;
+        }
+    }
+    ''',
+    '''
+    void b() {
+        boolean a;
+        if (a) {
+            return;
+        } else {
+            return;
+        }
+    }
+    ''',
+    '''
+    void b() {
+        boolean a;
+        while (a) {
+            return;
+        }
+    }
+    ''',
 )
 
 

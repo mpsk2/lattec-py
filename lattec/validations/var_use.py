@@ -1,3 +1,6 @@
+from antlr4.Token import CommonToken
+from antlr4.tree.Tree import TerminalNodeImpl
+
 from lattec.parser import Parser
 from lattec.validations.base import (
     BaseListener,
@@ -19,7 +22,20 @@ class State:
         self.ret_type = LatteVoid()
         self.ret_type_stack = []
 
+    @staticmethod
+    def normalize_name(name):
+        if isinstance(name, str):
+            return name
+        elif isinstance(name, CommonToken):
+            return name.text
+        elif isinstance(name, TerminalNodeImpl):
+            return name.getText()
+        else:
+            raise NotImplementedError(type(name))
+
     def add_var(self, name, type_, new_line):
+        name = self.normalize_name(name)
+
         if name in self.vars:
             level, old_line, _ = self.vars[name]
             if level == self.level:
@@ -28,6 +44,8 @@ class State:
         self.vars[name] = (self.level, new_line, type_)
 
     def use_var(self, name, line):
+        name = self.normalize_name(name)
+
         if name not in self.vars:
             self.errors.append(UndeclaredUse(name, line))
             return
@@ -53,17 +71,17 @@ class State:
         if t == self.ret_type:
             return
 
-        raise NotImplementedError()
+        raise NotImplementedError(self.vars)
 
     def cmp_type(self, t1, t2):
         if t1 == t2:
             return
 
-        raise NotImplementedError()
+        raise NotImplementedError(self.vars)
 
 
 class VarUseVisitor(BaseVisitor):
-    def __init__(self, state):
+    def __init__(self, state: State):
         self.state = state
 
     def visitProgram(self, ctx: Parser.ProgramContext):
@@ -166,7 +184,7 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEId(self, ctx: Parser.EIdContext):
-        return self.visitChildren(ctx)
+        return self.state.use_var(ctx.ID(), ctx.start.line)
 
     def visitEFunCall(self, ctx: Parser.EFunCallContext):
         return self.visitChildren(ctx)
@@ -300,7 +318,7 @@ class VarUseListener(BaseListener):
         raise NotImplementedError()
 
     def enterBlockStmt(self, ctx: Parser.BlockStmtContext):
-        raise NotImplementedError()
+        ctx.block().enterRule(self)
 
     def enterDecl(self, ctx: Parser.DeclContext):
         for item in ctx.item():
@@ -323,13 +341,33 @@ class VarUseListener(BaseListener):
         self.state.check_ret(LatteVoid())
 
     def enterCond(self, ctx: Parser.CondContext):
-        raise NotImplementedError()
+        t = ctx.cond.accept(self.visitor)
+        self.state.cmp_type(t, LatteBool())
+
+        self.state.level_up()
+        ctx.true_stmt.enterRule(self)
+        self.state.level_down()
 
     def enterCondElse(self, ctx: Parser.CondElseContext):
-        raise NotImplementedError()
+        t = ctx.cond.accept(self.visitor)
+        self.state.cmp_type(t, LatteBool())
+
+        self.state.level_up()
+        ctx.true_stmt.enterRule(self)
+        self.state.level_down()
+
+        self.state.level_up()
+        ctx.false_stmt.enterRule(self)
+        self.state.level_down()
+
 
     def enterWhile(self, ctx: Parser.WhileContext):
-        raise NotImplementedError()
+        t = ctx.cond.accept(self.visitor)
+        self.state.cmp_type(t, LatteBool())
+
+        self.state.level_up()
+        ctx.true_stmt.enterRule(self)
+        self.state.level_down()
 
     def enterForEach(self, ctx: Parser.ForEachContext):
         raise NotImplementedError()
