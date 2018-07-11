@@ -115,15 +115,6 @@ class VarUseVisitor(BaseVisitor):
     def visitMethod(self, ctx: Parser.MethodContext):
         return self.visitChildren(ctx)
 
-    def visitArrAcc(self, ctx: Parser.ArrAccContext):
-        return self.visitChildren(ctx)
-
-    def visitIdentVec(self, ctx: Parser.IdentVecContext):
-        if len(ctx.ID()) > 1:
-            return self.visitChildren(ctx)
-
-        return self.state.use_var(ctx.ID()[0], ctx.start.line)
-
     def visitTNonArray(self, ctx: Parser.TNonArrayContext):
         return ctx.base_type().accept(self)
 
@@ -156,7 +147,8 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitNewBasicTypeArray(self, ctx:Parser.NewBasicTypeArrayContext):
-        return self.visitChildren(ctx)
+        t = ctx.basic_type().accept(self)
+        return LatteArray(t)
 
     def visitItem(self, ctx: Parser.ItemContext):
         return self.visitChildren(ctx)
@@ -264,7 +256,15 @@ class VarUseVisitor(BaseVisitor):
         return self.visitChildren(ctx)
 
     def visitEAccArr(self, ctx: Parser.EAccArrContext):
-        return self.visitChildren(ctx)
+        t1 = ctx.expr()[0].accept(self)
+        t2 = ctx.expr()[1].accept(self)
+
+        self.state.cmp_type(LatteInt(), t2, ctx.expr()[1].start.line)
+
+        if not isinstance(t1, LatteArray):
+            raise NotImplementedError((t1, ctx.getText(), ctx.expr()[0].getText(), ctx.expr()[1].getText()))
+
+        return t1.t
 
     def visitAddOp(self, ctx: Parser.AddOpContext):
         return self.visitChildren(ctx)
@@ -353,11 +353,8 @@ class VarUseListener(BaseListener):
             item.enterRule(self)
 
     def enterAss(self, ctx: Parser.AssContext):
-        if ctx.arrAcc():
-            raise NotImplementedError()
-
-        t1 = ctx.identVec().accept(self.visitor)
-        t2 = ctx.expr().accept(self.visitor)
+        t1 = ctx.target.accept(self.visitor)
+        t2 = ctx.value.accept(self.visitor)
 
         self.state.cmp_type(t1, t2, ctx.start.line)
 
@@ -410,12 +407,6 @@ class VarUseListener(BaseListener):
 
     def enterSExp(self, ctx: Parser.SExpContext):
         ctx.expr().accept(self.visitor)
-
-    def enterArrAcc(self, ctx: Parser.ArrAccContext):
-        raise NotImplementedError()
-
-    def enterIdentVec(self, ctx: Parser.IdentVecContext):
-        raise NotImplementedError()
 
     def enterTNonArray(self, ctx: Parser.TNonArrayContext):
         raise NotImplementedError()

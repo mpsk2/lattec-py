@@ -28,7 +28,7 @@ stmt
     : SEM                                  # Empty
     | block                                # BlockStmt
     | type_ item ( COMMA item )* SEM       # Decl
-    | identVec arrAcc* ASS expr SEM        # Ass
+    | target=expr ASS value=expr SEM        # Ass
     | name=ID INCR SEM                     # Incr
     | name=ID DECR SEM                     # Decr
     | RETURN expr SEM                      # Ret
@@ -39,9 +39,6 @@ stmt
     | FOR LPAREN type_ ID COLON expr RPAREN stmt # ForEach
     | expr SEM                             # SExp
     ;
-
-arrAcc : LBRACK expr RBRACK;
-identVec : ID (DOT ID)*;
 
 type_
     : base_type                    #TNonArray
@@ -72,24 +69,24 @@ item
     ;
 
 expr
-    : (SUB|NOT) expr                      # EUnOp
-    | lhs=expr mulOp rhs=expr             # EMulOp
-    | lhs=expr addOp rhs=expr             # EAddOp
-    | lhs=expr relOp rhs=expr             # ERelOp
-    | <assoc=right> lhs=expr AND rhs=expr # EAnd
-    | <assoc=right> lhs=expr OR rhs=expr  # EOr
-    | ID                                  # EId
-    | NUMBER                              # EInt
-    | TRUE                                # ETrue
-    | FALSE                               # EFalse
-    | NULL                                # ENull
-    | NEW new_expr_type                   # ENew
-    | <assoc=right> expr DOT expr         # EAcc
-    | <assoc=right> expr LBRACK expr RBRACK     # EAccArr
-    | name=ID LPAREN ( expr ( COMMA expr )* )? RPAREN  # EFunCall
-    | LPAREN ID RPAREN expr               # ECast
-    | STRING                              # EStr
-    | LPAREN expr RPAREN                  # EParen
+    : (SUB|NOT) expr                                     # EUnOp
+    | lhs=expr mulOp rhs=expr                            # EMulOp
+    | lhs=expr addOp rhs=expr                            # EAddOp
+    | lhs=expr relOp rhs=expr                            # ERelOp
+    | <assoc=right> lhs=expr AND rhs=expr                # EAnd
+    | <assoc=right> lhs=expr OR rhs=expr                 # EOr
+    | ID                                                 # EId
+    | NUMBER                                             # EInt
+    | TRUE                                               # ETrue
+    | FALSE                                              # EFalse
+    | NULL                                               # ENull
+    | NEW new_expr_type                                  # ENew
+    | <assoc=right> expr DOT expr                        # EAcc
+    | <assoc=right> expr LBRACK expr RBRACK # EAccArr
+    | name=ID LPAREN ( expr ( COMMA expr )* )? RPAREN    # EFunCall
+    | LPAREN ID RPAREN expr                              # ECast
+    | STRING                                             # EStr
+    | LPAREN expr RPAREN                                 # EParen
     ;
 
 addOp

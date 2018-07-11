@@ -74,12 +74,6 @@ class BaseListener(Listener, metaclass=abc.ABCMeta):
     def enterSExp(self, ctx: Parser.SExpContext):
         raise NotImplementedError()
 
-    def enterArrAcc(self, ctx: Parser.ArrAccContext):
-        raise NotImplementedError()
-
-    def enterIdentVec(self, ctx: Parser.IdentVecContext):
-        raise NotImplementedError()
-
     def enterTNonArray(self, ctx: Parser.TNonArrayContext):
         raise NotImplementedError()
 
@@ -248,12 +242,6 @@ class BaseVisitor(Visitor):
         return self.visitChildren(ctx)
 
     def visitSExp(self, ctx: Parser.SExpContext):
-        return self.visitChildren(ctx)
-
-    def visitArrAcc(self, ctx: Parser.ArrAccContext):
-        return self.visitChildren(ctx)
-
-    def visitIdentVec(self, ctx: Parser.IdentVecContext):
         return self.visitChildren(ctx)
 
     def visitTNonArray(self, ctx: Parser.TNonArrayContext):

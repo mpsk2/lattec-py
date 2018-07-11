@@ -114,16 +114,6 @@ class LatteVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LatteParser#arrAcc.
-    def visitArrAcc(self, ctx:LatteParser.ArrAccContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by LatteParser#identVec.
-    def visitIdentVec(self, ctx:LatteParser.IdentVecContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by LatteParser#TNonArray.
     def visitTNonArray(self, ctx:LatteParser.TNonArrayContext):
         return self.visitChildren(ctx)

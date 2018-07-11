@@ -72,18 +72,18 @@ PROGRAMS = (
     #     int b = a.length;
     # }
     # ''',
-    # '''
-    # void assignArrayValue() {
-    #     int[] a = new int[10];
-    #     int a[5] = 1;
-    # }
-    # ''',
-    # '''
-    # void acceessArrayFieldValue() {
-    #     int[] a = new int[10];
-    #     int b = a[1] + a[3] + 5;
-    # }
-    # ''',
+    '''
+    void assignArrayValue() {
+        int[] a = new int[10];
+        a[5] = 1;
+    }
+    ''',
+    '''
+    void acceessArrayFieldValue() {
+        int[] a = new int[10];
+        int b = a[1] + a[3] + 5;
+    }
+    ''',
 )
 
 FAILING_TESTS = (

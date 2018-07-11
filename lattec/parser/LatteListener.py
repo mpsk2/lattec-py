@@ -197,24 +197,6 @@ class LatteListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by LatteParser#arrAcc.
-    def enterArrAcc(self, ctx:LatteParser.ArrAccContext):
-        pass
-
-    # Exit a parse tree produced by LatteParser#arrAcc.
-    def exitArrAcc(self, ctx:LatteParser.ArrAccContext):
-        pass
-
-
-    # Enter a parse tree produced by LatteParser#identVec.
-    def enterIdentVec(self, ctx:LatteParser.IdentVecContext):
-        pass
-
-    # Exit a parse tree produced by LatteParser#identVec.
-    def exitIdentVec(self, ctx:LatteParser.IdentVecContext):
-        pass
-
-
     # Enter a parse tree produced by LatteParser#TNonArray.
     def enterTNonArray(self, ctx:LatteParser.TNonArrayContext):
         pass
