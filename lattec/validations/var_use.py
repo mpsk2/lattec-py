@@ -279,14 +279,14 @@ class VarUseVisitor(BaseVisitor):
             elif isinstance(field, Parser.EIdContext):
                 name = field.ID()
                 field_type, success = self.state.use_method(t, name, ctx.start.line)
-                if not success:
+                if not success or (not isinstance(field, Parser.EAccContext)):
                     return field_type
                 return self.visitEAcc(field, field_type)
             else:
                 raise NotImplementedError()
 
     def visitENull(self, ctx: Parser.ENullContext):
-        return self.visitChildren(ctx)
+        return LatteNull()
 
     def visitEAccArr(self, ctx: Parser.EAccArrContext):
         t1 = ctx.expr()[0].accept(self)

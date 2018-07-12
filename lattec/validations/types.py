@@ -102,6 +102,18 @@ class LatteClass(LatteType):
         return self.name
 
 
+class LatteNull(LatteType):
+    @property
+    def methods(self):
+        return {}
+
+    def __eq__(self, other):
+        return isinstance(other, LatteObject)
+
+    def __repr__(self):
+        return 'Null'
+
+
 class LatteObject(LatteType):
     def __init__(self, c: LatteClass):
         self.c = c
@@ -111,7 +123,7 @@ class LatteObject(LatteType):
         return self.c.fields
 
     def __eq__(self, other):
-        return isinstance(other, LatteObject) and (self.c == other.c)
+        return isinstance(other, LatteNull) or (isinstance(other, LatteObject) and (self.c == other.c))
 
     def __repr__(self):
         return 'Obj of {}'.format(self.c.name)

@@ -1,4 +1,7 @@
 import abc
+
+from antlr4 import ParseTreeVisitor
+
 from lattec.parser import (
     Listener,
     Parser,
