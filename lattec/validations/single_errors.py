@@ -25,3 +25,11 @@ class TypeMissMatch(namedtuple('type_miss_match', ['t1', 't2', 'line'])):
             self.t2,
             self.line,
         )
+
+
+class NoReturn(namedtuple('no_return', ['name', 'line'])):
+    def __str__(self):
+        return 'no return at non void function {} starting at line {}'.format(
+            self.name,
+            self.line,
+        )

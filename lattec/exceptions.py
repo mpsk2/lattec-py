@@ -44,3 +44,12 @@ class LatteVariableNamesError(LatteError):
 
     def __str__(self):
         return 'Variables[{}]'.format(self.errors)
+
+
+class LatteReturnError(LatteError):
+    def __init__(self, errors, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.errors = errors
+
+    def __str__(self):
+        return 'Return[{}]'.format(self.errors)
