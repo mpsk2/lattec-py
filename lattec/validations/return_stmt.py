@@ -1,33 +1,20 @@
-import abc
-
-from antlr4.Token import CommonToken
-from antlr4.tree.Tree import TerminalNodeImpl
-
-from lattec.parser import (
-    Listener,
-    Parser,
-    Visitor,
+from lattec.parser import Parser
+from lattec.validations.base import (
+    BaseListener,
+    BaseState,
+    BaseVisitor,
 )
 
 
-class BaseState:
+class State(BaseState):
+    pass
+
+
+class ReturnListener(BaseListener):
     def __init__(self):
-        self.errors = []
+        self.state = State()
+        self.visitor = ReturnVisitor(self.state)
 
-    @staticmethod
-    def normalize_name(name):
-        if isinstance(name, str):
-            return name
-        elif isinstance(name, CommonToken):
-            return name.text
-        elif isinstance(name, TerminalNodeImpl):
-            return name.getText()
-        else:
-            raise NotImplementedError(type(name))
-
-
-class BaseListener(Listener, metaclass=abc.ABCMeta):
-    @abc.abstractmethod
     def summarize(self):
         pass
 
@@ -197,9 +184,9 @@ class BaseListener(Listener, metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
 
-class BaseVisitor(Visitor):
-    def visitChildren(self, node):
-        raise NotImplementedError('visitChildren {}'.format(node.__class__.__name__))
+class ReturnVisitor(BaseVisitor):
+    def __init__(self, state):
+        self.state = state
 
     def visitProgram(self, ctx: Parser.ProgramContext):
         return self.visitChildren(ctx)

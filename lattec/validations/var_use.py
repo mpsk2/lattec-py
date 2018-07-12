@@ -1,12 +1,10 @@
 from itertools import zip_longest
 
-from antlr4.Token import CommonToken
-from antlr4.tree.Tree import TerminalNodeImpl
-
 from lattec.exceptions import LatteVariableNamesError
 from lattec.parser import Parser
 from lattec.validations.base import (
     BaseListener,
+    BaseState,
     BaseVisitor,
 )
 from lattec.validations.types import *
@@ -17,29 +15,18 @@ from lattec.validations.single_errors import (
 )
 
 
-class State:
+class State(BaseState):
     def __init__(self):
+        super().__init__()
         self.level = 0
         self.vars = {
             k: (-1, -1, v)
             for k, v in INITIAL_FEED.items()
         }
-        self.errors = []
         self.vars_stack = []
         self.ret_type = LatteVoid()
         self.ret_type_stack = []
         self.context = None
-
-    @staticmethod
-    def normalize_name(name):
-        if isinstance(name, str):
-            return name
-        elif isinstance(name, CommonToken):
-            return name.text
-        elif isinstance(name, TerminalNodeImpl):
-            return name.getText()
-        else:
-            raise NotImplementedError(type(name))
 
     def add_var(self, name, type_, new_line):
         name = self.normalize_name(name)
@@ -118,15 +105,6 @@ class VarUseVisitor(BaseVisitor):
 
     def visitArg(self, ctx: Parser.ArgContext):
         return ctx.type_().accept(self)
-
-    def visitBlock(self, ctx: Parser.BlockContext):
-        return self.visitChildren(ctx)
-
-    def visitField(self, ctx: Parser.FieldContext):
-        return self.visitChildren(ctx)
-
-    def visitMethod(self, ctx: Parser.MethodContext):
-        return self.visitChildren(ctx)
 
     def visitTNonArray(self, ctx: Parser.TNonArrayContext):
         return ctx.base_type().accept(self)
@@ -313,15 +291,6 @@ class VarUseVisitor(BaseVisitor):
 
         return t1.t
 
-    def visitAddOp(self, ctx: Parser.AddOpContext):
-        return self.visitChildren(ctx)
-
-    def visitMulOp(self, ctx: Parser.MulOpContext):
-        return self.visitChildren(ctx)
-
-    def visitRelOp(self, ctx: Parser.RelOpContext):
-        return self.visitChildren(ctx)
-
 
 class VarUseListener(BaseListener):
     def __init__(self):
@@ -435,14 +404,8 @@ class VarUseListener(BaseListener):
 
         self.state.level_down()
 
-    def enterField(self, ctx: Parser.FieldContext):
-        raise NotImplementedError()
-
-    def enterMethod(self, ctx: Parser.MethodContext):
-        raise NotImplementedError()
-
     def enterEmpty(self, ctx: Parser.EmptyContext):
-        raise NotImplementedError()
+        pass
 
     def enterBlockStmt(self, ctx: Parser.BlockStmtContext):
         ctx.block().enterRule(self)
@@ -519,39 +482,6 @@ class VarUseListener(BaseListener):
 
     def enterSExp(self, ctx: Parser.SExpContext):
         ctx.expr().accept(self.visitor)
-
-    def enterTNonArray(self, ctx: Parser.TNonArrayContext):
-        raise NotImplementedError()
-
-    def enterTArray(self, ctx: Parser.TArrayContext):
-        raise NotImplementedError()
-
-    def enterTBasic(self, ctx: Parser.TBasicContext):
-        raise NotImplementedError()
-
-    def enterTIdent(self, ctx: Parser.TIdentContext):
-        raise NotImplementedError()
-
-    def enterTInt(self, ctx: Parser.TIntContext):
-        raise NotImplementedError()
-
-    def enterTStr(self, ctx: Parser.TStrContext):
-        raise NotImplementedError()
-
-    def enterTBool(self, ctx: Parser.TBoolContext):
-        raise NotImplementedError()
-
-    def enterTVoid(self, ctx: Parser.TVoidContext):
-        raise NotImplementedError()
-
-    def enterNewObj(self, ctx:Parser.NewObjContext):
-        raise NotImplementedError()
-
-    def enterNewObjArray(self, ctx:Parser.NewObjArrayContext):
-        raise NotImplementedError()
-
-    def enterNewBasicTypeArray(self, ctx:Parser.NewBasicTypeArrayContext):
-        raise NotImplementedError()
 
     def enterItem(self, ctx: Parser.ItemContext):
         # ugly
