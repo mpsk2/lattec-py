@@ -2414,16 +2414,18 @@ class LatteParser ( Parser ):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.ExprContext
             super().__init__(parser)
+            self.obj = None # ExprContext
+            self.field = None # ExprContext
             self.copyFrom(ctx)
 
+        def DOT(self):
+            return self.getToken(LatteParser.DOT, 0)
         def expr(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(LatteParser.ExprContext)
             else:
                 return self.getTypedRuleContext(LatteParser.ExprContext,i)
 
-        def DOT(self):
-            return self.getToken(LatteParser.DOT, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterEAcc" ):
@@ -2690,6 +2692,7 @@ class LatteParser ( Parser ):
                     la_ = self._interp.adaptivePredict(self._input,19,self._ctx)
                     if la_ == 1:
                         localctx = LatteParser.EAccContext(self, LatteParser.ExprContext(self, _parentctx, _parentState))
+                        localctx.obj = _prevctx
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 226
                         if not self.precpred(self._ctx, 18):
@@ -2698,7 +2701,7 @@ class LatteParser ( Parser ):
                         self.state = 227
                         self.match(LatteParser.DOT)
                         self.state = 228
-                        self.expr(19)
+                        localctx.field = self.expr(19)
                         pass
 
                     elif la_ == 2:

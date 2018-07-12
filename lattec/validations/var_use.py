@@ -87,16 +87,28 @@ class State:
 
         self.errors.append(TypeMissMatch(t1, t2, line))
 
+    def use_method(self, t: LatteType, method_name, line):
+        methods = t.methods
+        name = self.normalize_name(method_name)
+        if name not in methods:
+            raise NotImplementedError()
+
+        ret_type = methods[name]
+        return ret_type, isinstance(ret_type, LatteObject)
+
 
 class VarUseVisitor(BaseVisitor):
-    def __init__(self, state: State):
+    def __init__(self, state: State, listener: BaseListener):
         self.state = state
+        self.listener = listener
 
     def visitProgram(self, ctx: Parser.ProgramContext):
         return self.visitChildren(ctx)
 
     def visitFnDef(self, ctx: Parser.FnDefContext):
-        return self.visitChildren(ctx)
+        args = [] if ctx.argVec() is None else ctx.argVec().accept(self)
+        ret = ctx.type_().accept(self)
+        return LatteFunction(args, ret)
 
     def visitClsDef(self, ctx: Parser.ClsDefContext):
         return self.visitChildren(ctx)
@@ -127,7 +139,9 @@ class VarUseVisitor(BaseVisitor):
         return ctx.basic_type().accept(self)
 
     def visitTIdent(self, ctx: Parser.TIdentContext):
-        return self.visitChildren(ctx)
+        name = ctx.ID()
+        t = self.state.use_var(name, ctx.start.line)
+        return LatteObject(t)
 
     def visitTInt(self, ctx: Parser.TIntContext):
         return LatteInt()
@@ -142,7 +156,11 @@ class VarUseVisitor(BaseVisitor):
         return LatteVoid()
 
     def visitNewObj(self, ctx:Parser.NewObjContext):
-        return self.visitChildren(ctx)
+        t = self.state.use_var(ctx.class_name, ctx.start.line)
+        if isinstance(t, LatteClass):
+            return LatteObject(t)
+        else:
+            raise NotImplementedError()
 
     def visitNewObjArray(self, ctx:Parser.NewObjArrayContext):
         return self.visitChildren(ctx)
@@ -250,8 +268,22 @@ class VarUseVisitor(BaseVisitor):
 
         return t1
 
-    def visitEAcc(self, ctx: Parser.EAccContext):
-        return self.visitChildren(ctx)
+    def visitEAcc(self, ctx: Parser.EAccContext, t=None):
+        if t is None:
+            t = ctx.obj.accept(self)
+            return self.visitEAcc(ctx, t)
+        else:
+            field = ctx.field
+            if isinstance(field, Parser.EFunCallContext):
+                raise NotImplementedError()
+            elif isinstance(field, Parser.EIdContext):
+                name = field.ID()
+                field_type, success = self.state.use_method(t, name, ctx.start.line)
+                if not success:
+                    return field_type
+                return self.visitEAcc(field, field_type)
+            else:
+                raise NotImplementedError()
 
     def visitENull(self, ctx: Parser.ENullContext):
         return self.visitChildren(ctx)
@@ -277,7 +309,7 @@ class VarUseVisitor(BaseVisitor):
 class VarUseListener(BaseListener):
     def __init__(self):
         self.state = State()
-        self.visitor = VarUseVisitor(self.state)
+        self.visitor = VarUseVisitor(self.state, self)
 
     def summarize(self):
         if self.state.errors:
@@ -287,15 +319,35 @@ class VarUseListener(BaseListener):
         self.state.level_up()
 
         for topDef in ctx.topDef():
+            if isinstance(topDef, Parser.ClsDefContext):
+                fields = {}
+                t = LatteClass(topDef.name.text, fields)
+                self.state.add_var(topDef.name, t, topDef.start.line)
+
+        self.state.level_up()
+
+        for topDef in ctx.topDef():
             if isinstance(topDef, Parser.FnDefContext):
                 args = [] if topDef.argVec() is None else topDef.argVec().accept(self.visitor)
                 ret = topDef.type_().accept(self.visitor)
-                fn = LatteFunction(args, ret)
+                fn = topDef.accept(self.visitor)
                 self.state.add_var(topDef.name, fn, topDef.start.line)
             elif isinstance(topDef, Parser.ClsDefContext):
                 fields = {}
                 for field in topDef.clsElem():
-                    raise NotImplementedError()
+                    if isinstance(field, Parser.FieldContext):
+                        name = field.ID().getText()
+                        t = field.type_().accept(self.visitor)
+                    elif isinstance(field, Parser.MethodContext):
+                        name = State.normalize_name(field.topDef().name)
+                        t = field.topDef().accept(self.visitor)
+                    else:
+                        raise NotImplementedError()
+
+                    if name in fields:
+                        raise NotImplementedError()
+
+                    fields[name] = t
 
                 t = LatteClass(topDef.name.text, fields)
                 self.state.add_var(topDef.name, t, topDef.start.line)
@@ -306,7 +358,7 @@ class VarUseListener(BaseListener):
             topDef.enterRule(self)
 
         self.state.level_down()
-
+        self.state.level_down()
         self.state.level_down()
 
     def enterFnDef(self, ctx: Parser.FnDefContext):
@@ -326,10 +378,26 @@ class VarUseListener(BaseListener):
         self.state.level_up()
         self.state.context = ctx.name
 
-        for field in ctx.clsElem():
+        t = self.state.use_var(ctx.name, ctx.start.line)
+
+        if isinstance(t, LatteClass):
+            for name, sub_t in t.fields.items():
+                self.state.add_var(name, sub_t, ctx.start.line)
+        else:
             raise NotImplementedError()
 
+        self.state.level_up()
+
+        for field in ctx.clsElem():
+            if isinstance(field, Parser.FieldContext):
+                pass
+            elif isinstance(field, Parser.MethodContext):
+                field.topDef().enterRule(self)
+            else:
+                raise NotImplementedError()
+
         self.state.context = None
+        self.state.level_down()
         self.state.level_down()
 
     def enterArgVec(self, ctx: Parser.ArgVecContext):
@@ -462,66 +530,3 @@ class VarUseListener(BaseListener):
             self.state.cmp_type(t, expr_t, ctx.start.line)
 
         self.state.add_var(ctx.name, t, ctx.start.line)
-
-    def enterEId(self, ctx: Parser.EIdContext):
-        raise NotImplementedError()
-
-    def enterEFunCall(self, ctx: Parser.EFunCallContext):
-        raise NotImplementedError()
-
-    def enterERelOp(self, ctx: Parser.ERelOpContext):
-        raise NotImplementedError()
-
-    def enterETrue(self, ctx: Parser.ETrueContext):
-        raise NotImplementedError()
-
-    def enterECast(self, ctx: Parser.ECastContext):
-        raise NotImplementedError()
-
-    def enterEOr(self, ctx: Parser.EOrContext):
-        raise NotImplementedError()
-
-    def enterEInt(self, ctx: Parser.EIntContext):
-        raise NotImplementedError()
-
-    def enterEUnOp(self, ctx: Parser.EUnOpContext):
-        raise NotImplementedError()
-
-    def enterEStr(self, ctx: Parser.EStrContext):
-        raise NotImplementedError()
-
-    def enterEMulOp(self, ctx: Parser.EMulOpContext):
-        raise NotImplementedError()
-
-    def enterEAnd(self, ctx: Parser.EAndContext):
-        raise NotImplementedError()
-
-    def enterEParen(self, ctx: Parser.EParenContext):
-        raise NotImplementedError()
-
-    def enterEFalse(self, ctx: Parser.EFalseContext):
-        raise NotImplementedError()
-
-    def enterENew(self, ctx: Parser.ENewContext):
-        raise NotImplementedError()
-
-    def enterEAddOp(self, ctx: Parser.EAddOpContext):
-        raise NotImplementedError()
-
-    def enterEAcc(self, ctx: Parser.EAccContext):
-        raise NotImplementedError()
-
-    def enterENull(self, ctx: Parser.ENullContext):
-        raise NotImplementedError()
-
-    def enterEAccArr(self, ctx: Parser.EAccArrContext):
-        raise NotImplementedError()
-
-    def enterAddOp(self, ctx: Parser.AddOpContext):
-        raise NotImplementedError()
-
-    def enterMulOp(self, ctx: Parser.MulOpContext):
-        raise NotImplementedError()
-
-    def enterRelOp(self, ctx: Parser.RelOpContext):
-        raise NotImplementedError()

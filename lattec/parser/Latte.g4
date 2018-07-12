@@ -69,7 +69,7 @@ item
     ;
 
 expr
-    : expr DOT expr                                      # EAcc
+    : obj=expr DOT field=expr                            # EAcc
     | NEW new_expr_type                                  # ENew
     | expr LBRACK expr RBRACK                            # EAccArr
     | (SUB|NOT) expr                                     # EUnOp
