@@ -89,9 +89,6 @@ class ReturnListener(BaseListener):
     def enterRet(self, ctx: Parser.RetContext):
         self.state.got_return = True
 
-    def enterVRet(self, ctx: Parser.VRetContext):
-        self.state.got_return = True
-
     def enterCond(self, ctx: Parser.CondContext):
         true_val = ctx.true_stmt.accept(self.visitor)
 
@@ -116,8 +113,7 @@ class ReturnListener(BaseListener):
             self.state.got_return = True
 
     def enterForEach(self, ctx: Parser.ForEachContext):
-        if ctx.stmt().accept(self.visitor):
-            self.state.got_return = True
+        pass
 
     def enterSExp(self, ctx: Parser.SExpContext):
         pass
@@ -154,9 +150,6 @@ class ReturnVisitor(BaseVisitor):
     def visitRet(self, ctx: Parser.RetContext):
         return True
 
-    def visitVRet(self, ctx: Parser.VRetContext):
-        return True
-
     def visitCond(self, ctx: Parser.CondContext):
         true_val = ctx.true_stmt.accept(self)
         return true_val and isinstance(ctx.cond, Parser.ETrueContext)
@@ -176,7 +169,7 @@ class ReturnVisitor(BaseVisitor):
         return true_val and isinstance(ctx.cond, Parser.ETrueContext)
 
     def visitForEach(self, ctx: Parser.ForEachContext):
-        return ctx.stmt().accept(self)
+        return False
 
     def visitSExp(self, ctx: Parser.SExpContext):
         return False
