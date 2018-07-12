@@ -113,11 +113,20 @@ def test_good_core_files(file_path):
     propgram = parser.program()
     listener = VarUseListener()
     propgram.enterRule(listener)
-    listener.summarize()\
+    listener.summarize()
 
 
 @pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/good/extensions/**/*.lat', recursive=True))
 def test_good_extensions_files(file_path):
+    parser = parse_file(file_path)
+    propgram = parser.program()
+    listener = VarUseListener()
+    propgram.enterRule(listener)
+    listener.summarize()
+
+
+@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/good/self/*.lat', recursive=True))
+def test_good_self_files(file_path):
     parser = parse_file(file_path)
     propgram = parser.program()
     listener = VarUseListener()
