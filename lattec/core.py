@@ -45,6 +45,10 @@ def main_f():
     program_ctx = parser.program()
 
     validate(program_ctx)
+    if args.validation_only:
+        print('Finished validation with success')
+        return
+
     compile_latte(program_ctx)
 
 
