@@ -4,3 +4,12 @@ omit =
     lattec/parser/LatteListener.py
     lattec/parser/LatteVisitor.py
 
+[report]
+exclude_lines =
+    pragma: no cover
+
+    def __repr__
+    if self\.debug
+
+    if 0:
+    if __name__ == .__main__.:
