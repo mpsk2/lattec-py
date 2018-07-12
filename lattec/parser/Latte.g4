@@ -84,7 +84,7 @@ expr
     | FALSE                                              # EFalse
     | NULL                                               # ENull
     | name=ID LPAREN ( expr ( COMMA expr )* )? RPAREN    # EFunCall
-    | LPAREN ID RPAREN expr                              # ECast
+    | LPAREN name=ID RPAREN expr                         # ECast
     | STRING                                             # EStr
     | LPAREN expr RPAREN                                 # EParen
     ;

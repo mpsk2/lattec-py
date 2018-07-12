@@ -91,7 +91,7 @@ class State:
         methods = t.methods
         name = self.normalize_name(method_name)
         if name not in methods:
-            raise NotImplementedError()
+            raise NotImplementedError(name, methods, t)
 
         ret_type = methods[name]
         return ret_type, isinstance(ret_type, LatteObject)
@@ -175,8 +175,9 @@ class VarUseVisitor(BaseVisitor):
     def visitEId(self, ctx: Parser.EIdContext):
         return self.state.use_var(ctx.ID(), ctx.start.line)
 
-    def visitEFunCall(self, ctx: Parser.EFunCallContext):
-        t = self.state.use_var(ctx.name, ctx.start.line)
+    def visitEFunCall(self, ctx: Parser.EFunCallContext, t=None):
+        if t is None:
+            t = self.state.use_var(ctx.name, ctx.start.line)
 
         args = [
             arg.accept(self)
@@ -201,7 +202,17 @@ class VarUseVisitor(BaseVisitor):
         return LatteBool()
 
     def visitECast(self, ctx: Parser.ECastContext):
-        return self.visitChildren(ctx)
+        # Should work only for null or the same type
+        expr_type = ctx.expr().accept(self)
+        cast_type = self.state.use_var(ctx.name, ctx.start.line)
+
+        if not isinstance(cast_type, LatteClass):
+            raise NotImplementedError('Should be a class')
+
+        if not isinstance(expr_type, (LatteNull, LatteObject)):
+            raise NotImplementedError('Should be a null or object')
+
+        return LatteObject(cast_type)
 
     def visitEOr(self, ctx: Parser.EOrContext):
         t1 = ctx.lhs.accept(self)
@@ -275,7 +286,13 @@ class VarUseVisitor(BaseVisitor):
         else:
             field = ctx.field
             if isinstance(field, Parser.EFunCallContext):
-                raise NotImplementedError()
+                name = field.ID()
+                field_type, success = self.state.use_method(t, name, ctx.start.line)
+                fn_type = self.visitEFunCall(ctx.field, field_type)
+                assert fn_type is not None
+                if not success or (not isinstance(field, Parser.EAccContext)):
+                    return fn_type
+                return self.visitEAcc(field, fn_type)
             elif isinstance(field, Parser.EIdContext):
                 name = field.ID()
                 field_type, success = self.state.use_method(t, name, ctx.start.line)
@@ -381,8 +398,10 @@ class VarUseListener(BaseListener):
         t = self.state.use_var(ctx.name, ctx.start.line)
 
         if isinstance(t, LatteClass):
+            self.state.add_var('self', LatteObject(t), ctx.start.line)
             for name, sub_t in t.fields.items():
                 self.state.add_var(name, sub_t, ctx.start.line)
+
         else:
             raise NotImplementedError()
 

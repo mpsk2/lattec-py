@@ -11,10 +11,10 @@ TYPES = (
     (LatteArray(LatteInt()), {'length': LatteInt()}),
     (LatteFunction([], LatteVoid()), {'__call__': LatteVoid()}),
     (
-        LatteClass(
+        LatteObject(LatteClass(
             'abc',
             {'a': LatteInt(), 'b': LatteFunction([], LatteInt())}
-        ),
+        )),
         {'a': LatteInt(), 'b': LatteFunction([], LatteInt())},
     ),
 )

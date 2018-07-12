@@ -81,7 +81,7 @@ class LatteFunction(LatteType):
 
     def __repr__(self):
         return 'Function(({}) => {})'.format(
-            ','.join(repr(self.args)),
+            ','.join(map(repr, self.args)),
             repr(self.ret),
         )
 

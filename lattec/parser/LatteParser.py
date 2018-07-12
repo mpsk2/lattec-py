@@ -2130,17 +2130,18 @@ class LatteParser ( Parser ):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.ExprContext
             super().__init__(parser)
+            self.name = None # Token
             self.copyFrom(ctx)
 
         def LPAREN(self):
             return self.getToken(LatteParser.LPAREN, 0)
-        def ID(self):
-            return self.getToken(LatteParser.ID, 0)
         def RPAREN(self):
             return self.getToken(LatteParser.RPAREN, 0)
         def expr(self):
             return self.getTypedRuleContext(LatteParser.ExprContext,0)
 
+        def ID(self):
+            return self.getToken(LatteParser.ID, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterECast" ):
@@ -2651,7 +2652,7 @@ class LatteParser ( Parser ):
                 self.state = 215
                 self.match(LatteParser.LPAREN)
                 self.state = 216
-                self.match(LatteParser.ID)
+                localctx.name = self.match(LatteParser.ID)
                 self.state = 217
                 self.match(LatteParser.RPAREN)
                 self.state = 218
