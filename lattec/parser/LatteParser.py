@@ -1057,6 +1057,7 @@ class LatteParser ( Parser ):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a LatteParser.StmtContext
             super().__init__(parser)
+            self.name = None # Token
             self.copyFrom(ctx)
 
         def FOR(self):
@@ -1066,8 +1067,6 @@ class LatteParser ( Parser ):
         def type_(self):
             return self.getTypedRuleContext(LatteParser.Type_Context,0)
 
-        def ID(self):
-            return self.getToken(LatteParser.ID, 0)
         def COLON(self):
             return self.getToken(LatteParser.COLON, 0)
         def expr(self):
@@ -1078,6 +1077,8 @@ class LatteParser ( Parser ):
         def stmt(self):
             return self.getTypedRuleContext(LatteParser.StmtContext,0)
 
+        def ID(self):
+            return self.getToken(LatteParser.ID, 0)
 
         def enterRule(self, listener:ParseTreeListener):
             if hasattr( listener, "enterForEach" ):
@@ -1337,7 +1338,7 @@ class LatteParser ( Parser ):
                 self.state = 137
                 self.type_()
                 self.state = 138
-                self.match(LatteParser.ID)
+                localctx.name = self.match(LatteParser.ID)
                 self.state = 139
                 self.match(LatteParser.COLON)
                 self.state = 140

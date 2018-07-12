@@ -116,7 +116,14 @@ def test_good_core_files(file_path):
     listener.summarize()
 
 
-@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/good/extensions/**/*.lat', recursive=True))
+@pytest.mark.parametrize(
+    "file_path",
+    [
+        file_path
+        for file_path in glob.iglob(r'tests/parser/good/extensions/**/*.lat', recursive=True)
+        if 'part' not in file_path
+    ]
+)
 def test_good_extensions_files(file_path):
     parser = parse_file(file_path)
     propgram = parser.program()

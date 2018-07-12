@@ -25,19 +25,19 @@ clsElem
     ;
 
 stmt
-    : SEM                                  # Empty
-    | block                                # BlockStmt
-    | type_ item ( COMMA item )* SEM       # Decl
-    | target=expr ASS value=expr SEM        # Ass
-    | name=ID INCR SEM                     # Incr
-    | name=ID DECR SEM                     # Decr
-    | RETURN expr SEM                      # Ret
-    | RETURN SEM                           # VRet
-    | IF LPAREN cond=expr RPAREN true_stmt=stmt               # Cond
-    | IF LPAREN cond=expr RPAREN true_stmt=stmt ELSE false_stmt=stmt   # CondElse
-    | WHILE LPAREN cond=expr RPAREN true_stmt=stmt        # While
-    | FOR LPAREN type_ ID COLON expr RPAREN stmt # ForEach
-    | expr SEM                             # SExp
+    : SEM                                                            # Empty
+    | block                                                          # BlockStmt
+    | type_ item ( COMMA item )* SEM                                 # Decl
+    | target=expr ASS value=expr SEM                                 # Ass
+    | name=ID INCR SEM                                               # Incr
+    | name=ID DECR SEM                                               # Decr
+    | RETURN expr SEM                                                # Ret
+    | RETURN SEM                                                     # VRet
+    | IF LPAREN cond=expr RPAREN true_stmt=stmt                      # Cond
+    | IF LPAREN cond=expr RPAREN true_stmt=stmt ELSE false_stmt=stmt # CondElse
+    | WHILE LPAREN cond=expr RPAREN true_stmt=stmt                   # While
+    | FOR LPAREN type_ name=ID COLON expr RPAREN stmt                # ForEach
+    | expr SEM                                                       # SExp
     ;
 
 type_

@@ -473,7 +473,6 @@ class VarUseListener(BaseListener):
         ctx.false_stmt.enterRule(self)
         self.state.level_down()
 
-
     def enterWhile(self, ctx: Parser.WhileContext):
         t = ctx.cond.accept(self.visitor)
         self.state.cmp_type(t, LatteBool(), ctx.start.line)
@@ -483,7 +482,21 @@ class VarUseListener(BaseListener):
         self.state.level_down()
 
     def enterForEach(self, ctx: Parser.ForEachContext):
-        raise NotImplementedError()
+        self.state.level_up()
+
+        arr_type = ctx.expr().accept(self.visitor)
+        var_type = ctx.type_().accept(self.visitor)
+
+        self.state.cmp_type(LatteArray(var_type), arr_type, ctx.start.line)
+        self.state.add_var(ctx.name, var_type, ctx.start.line)
+
+        self.state.level_up()
+
+        ctx.stmt().enterRule(self)
+
+        self.state.level_down()
+
+        self.state.level_down()
 
     def enterSExp(self, ctx: Parser.SExpContext):
         ctx.expr().accept(self.visitor)
