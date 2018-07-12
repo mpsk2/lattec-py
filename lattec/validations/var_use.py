@@ -28,6 +28,7 @@ class State:
         self.vars_stack = []
         self.ret_type = LatteVoid()
         self.ret_type_stack = []
+        self.context = None
 
     @staticmethod
     def normalize_name(name):
@@ -291,6 +292,13 @@ class VarUseListener(BaseListener):
                 ret = topDef.type_().accept(self.visitor)
                 fn = LatteFunction(args, ret)
                 self.state.add_var(topDef.name, fn, topDef.start.line)
+            elif isinstance(topDef, Parser.ClsDefContext):
+                fields = {}
+                for field in topDef.clsElem():
+                    raise NotImplementedError()
+
+                t = LatteClass(topDef.name.text, fields)
+                self.state.add_var(topDef.name, t, topDef.start.line)
 
         self.state.level_up()
 
@@ -315,7 +323,14 @@ class VarUseListener(BaseListener):
         self.state.level_down()
 
     def enterClsDef(self, ctx: Parser.ClsDefContext):
-        raise NotImplementedError()
+        self.state.level_up()
+        self.state.context = ctx.name
+
+        for field in ctx.clsElem():
+            raise NotImplementedError()
+
+        self.state.context = None
+        self.state.level_down()
 
     def enterArgVec(self, ctx: Parser.ArgVecContext):
         for arg in ctx.arg():
