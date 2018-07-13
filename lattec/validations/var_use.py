@@ -235,8 +235,8 @@ class VarUseVisitor(BaseVisitor):
             self.state.cmp_type(LatteBool(), t, ctx.start.line)
         elif ctx.SUB() is not None:
             self.state.cmp_type(LatteInt(), t, ctx.start.line)
-        else:
-            raise NotImplementedError()
+        else:  # pragma: no cover
+            assert False, 'should not reach that point'
 
         return t
 
@@ -309,8 +309,8 @@ class VarUseVisitor(BaseVisitor):
                 if ret_sub is None:
                     return
                 return self.visitEAcc(ctx.field, ret_sub)
-            else:
-                raise NotImplementedError()
+            else:  # pragma: no cover
+                assert False, 'should not reach that point'
 
     def visitENull(self, ctx: Parser.ENullContext):
         return LatteNull()
