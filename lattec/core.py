@@ -4,6 +4,7 @@ import sys
 
 from lattec import __version__
 from lattec.exceptions import LatteParserError
+from lattec.optimalize import optimize
 from lattec.parser import parse_file
 from lattec.validations.validate import validate
 
@@ -12,9 +13,11 @@ __all__ = [
     'main_f',
 ]
 
+
 arg_parser = argparse.ArgumentParser(description='Latte compiler', prog='lattec')
 arg_parser.add_argument('path', metavar='FILE', type=argparse.FileType('r'), help='File to be compiled.')
 arg_parser.add_argument('--output', '-o', dest='output', type=str, help='Output file path.')
+arg_parser.add_argument('--optimize', '-O', dest='optimize', type=int, default=1, choices=range(2))
 arg_parser.add_argument('--verbose', dest='verbose', type=bool, help='Additional log output', default=False)
 arg_parser.add_argument('--version', '-v', action='version', version='%(prog)s ' + __version__)
 arg_parser.add_argument('--validation-only', action='store_true', help='Run only validations')
@@ -48,6 +51,9 @@ def main_f():
     if args.validation_only:
         print('Finished validation with success')
         return
+
+    if args.optimize == 1:
+        program_ctx = optimize(program_ctx)
 
     compile_latte(program_ctx)
 
