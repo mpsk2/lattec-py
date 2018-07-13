@@ -42,7 +42,7 @@ def test_good_self_files(file_path):
     listener.summarize()
 
 
-@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/bad/var/*.lat', recursive=True))
+@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/bad/variable_use/*.lat', recursive=True))
 def test_var_use_failing(file_path):
     parser = parse_file(file_path)
     program = parser.program()
