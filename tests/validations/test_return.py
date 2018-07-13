@@ -2,16 +2,16 @@ import glob
 
 import pytest
 
-from lattec.exceptions import LatteVariableNamesError
+from lattec.exceptions import LatteReturnError
 from lattec.parser import parse_file
-from lattec.validations.var_use import VarUseListener
+from lattec.validations.return_stmt import ReturnListener
 
 
 @pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/good/core/*.lat', recursive=True))
 def test_good_core_files(file_path):
     parser = parse_file(file_path)
     propgram = parser.program()
-    listener = VarUseListener()
+    listener = ReturnListener()
     propgram.enterRule(listener)
     listener.summarize()
 
@@ -27,7 +27,7 @@ def test_good_core_files(file_path):
 def test_good_extensions_files(file_path):
     parser = parse_file(file_path)
     propgram = parser.program()
-    listener = VarUseListener()
+    listener = ReturnListener()
     propgram.enterRule(listener)
     listener.summarize()
 
@@ -36,17 +36,17 @@ def test_good_extensions_files(file_path):
 def test_good_self_files(file_path):
     parser = parse_file(file_path)
     propgram = parser.program()
-    listener = VarUseListener()
+    listener = ReturnListener()
     propgram.enterRule(listener)
     listener.summarize()
 
 
-@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/bad/variable_use/*.lat', recursive=True))
+@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/bad/no_return/*.lat', recursive=True))
 def test_var_use_failing(file_path):
     parser = parse_file(file_path)
     program = parser.program()
-    listener = VarUseListener()
+    listener = ReturnListener()
     program.enterRule(listener)
-    with pytest.raises(LatteVariableNamesError):
+    with pytest.raises(LatteReturnError):
         listener.summarize()
 

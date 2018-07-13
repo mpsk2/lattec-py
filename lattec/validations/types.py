@@ -99,7 +99,7 @@ class LatteClass(LatteType):
         return isinstance(other, LatteClass) and (self.name == other.name)
 
     def __repr__(self):
-        return self.name
+        return '{} [{}]'.format(self.name, self.fields)
 
 
 class LatteNull(LatteType):
@@ -126,7 +126,7 @@ class LatteObject(LatteType):
         return isinstance(other, LatteNull) or (isinstance(other, LatteObject) and (self.c == other.c))
 
     def __repr__(self):
-        return 'Obj of {}'.format(self.c.name)
+        return 'Obj of {} [{}]'.format(self.c.name, self.methods)
 
 
 INITIAL_FEED = {

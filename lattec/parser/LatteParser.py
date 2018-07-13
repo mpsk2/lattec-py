@@ -108,7 +108,7 @@ def serializedATN():
         buf.write("\2\2\2\u00e2\u00cb\3\2\2\2\u00e2\u00cc\3\2\2\2\u00e2\u00d9")
         buf.write("\3\2\2\2\u00e2\u00dd\3\2\2\2\u00e2\u00de\3\2\2\2\u00e3")
         buf.write("\u0100\3\2\2\2\u00e4\u00e5\f\24\2\2\u00e5\u00e6\7\16\2")
-        buf.write("\2\u00e6\u00ff\5\32\16\25\u00e7\u00e8\f\20\2\2\u00e8\u00e9")
+        buf.write("\2\u00e6\u00ff\5\32\16\24\u00e7\u00e8\f\20\2\2\u00e8\u00e9")
         buf.write("\5\36\20\2\u00e9\u00ea\5\32\16\21\u00ea\u00ff\3\2\2\2")
         buf.write("\u00eb\u00ec\f\17\2\2\u00ec\u00ed\5\34\17\2\u00ed\u00ee")
         buf.write("\5\32\16\20\u00ee\u00ff\3\2\2\2\u00ef\u00f0\f\16\2\2\u00f0")
@@ -2703,7 +2703,7 @@ class LatteParser ( Parser ):
                         self.state = 227
                         self.match(LatteParser.DOT)
                         self.state = 228
-                        localctx.field = self.expr(19)
+                        localctx.field = self.expr(18)
                         pass
 
                     elif la_ == 2:

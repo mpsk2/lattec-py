@@ -1,3 +1,4 @@
+from copy import copy
 from itertools import zip_longest
 
 from lattec.exceptions import LatteVariableNamesError
@@ -14,6 +15,7 @@ from lattec.validations.single_errors import (
     Redeclaration,
     UndeclaredUse,
     TypeMissMatch,
+    NoSuchField,
 )
 
 
@@ -80,7 +82,8 @@ class State(BaseState):
         methods = t.methods
         name = self.normalize_name(method_name)
         if name not in methods:
-            raise NotImplementedError(name, methods, t)
+            self.errors.append(NoSuchField(t, name, line))
+            return None, False
 
         ret_type = methods[name]
         return ret_type, isinstance(ret_type, LatteObject)
@@ -269,6 +272,8 @@ class VarUseVisitor(BaseVisitor):
     def visitEAcc(self, ctx: Parser.EAccContext, t=None):
         if t is None:
             t = ctx.obj.accept(self)
+            if t is None:
+                return None
             return self.visitEAcc(ctx, t)
         else:
             field = ctx.field
@@ -276,7 +281,6 @@ class VarUseVisitor(BaseVisitor):
                 name = field.ID()
                 field_type, success = self.state.use_method(t, name, ctx.start.line)
                 fn_type = self.visitEFunCall(ctx.field, field_type)
-                assert fn_type is not None
                 if not success or (not isinstance(field, Parser.EAccContext)):
                     return fn_type
                 return self.visitEAcc(field, fn_type)
@@ -286,6 +290,13 @@ class VarUseVisitor(BaseVisitor):
                 if not success or (not isinstance(field, Parser.EAccContext)):
                     return field_type
                 return self.visitEAcc(field, field_type)
+            elif isinstance(field, Parser.EAccContext):
+                sub = copy(ctx)
+                sub.field = sub.field.obj
+                ret_sub = self.visitEAcc(sub, t)
+                if ret_sub is None:
+                    return
+                return self.visitEAcc(ctx.field, ret_sub)
             else:
                 raise NotImplementedError()
 
@@ -323,8 +334,6 @@ class VarUseListener(BaseListener):
 
         for topDef in ctx.topDef():
             if isinstance(topDef, Parser.FnDefContext):
-                args = [] if topDef.argVec() is None else topDef.argVec().accept(self.visitor)
-                ret = topDef.type_().accept(self.visitor)
                 fn = topDef.accept(self.visitor)
                 self.state.add_var(topDef.name, fn, topDef.start.line)
             elif isinstance(topDef, Parser.ClsDefContext):
@@ -344,8 +353,8 @@ class VarUseListener(BaseListener):
 
                     fields[name] = t
 
-                t = LatteClass(topDef.name.text, fields)
-                self.state.add_var(topDef.name, t, topDef.start.line)
+                t = self.state.use_var(topDef.name, topDef.start.line)
+                t.fields = fields
 
         self.state.level_up()
 

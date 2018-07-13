@@ -27,6 +27,15 @@ class TypeMissMatch(namedtuple('type_miss_match', ['t1', 't2', 'line'])):
         )
 
 
+class NoSuchField(namedtuple('no_such_field', ['t', 'name', 'line'])):
+    def ___str___(self):
+        return '{} does not have field {} at line {}'.format(
+            self.t,
+            self.name,
+            self.line,
+        )
+
+
 class AdditionalArgument(namedtuple('additional_argument', ['func_name', 'arg', 'line'])):
     def __str__(self):
         return 'function {} has been passed with additional argument {} at line {}'.format(
