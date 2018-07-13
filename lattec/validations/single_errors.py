@@ -27,6 +27,24 @@ class TypeMissMatch(namedtuple('type_miss_match', ['t1', 't2', 'line'])):
         )
 
 
+class AdditionalArgument(namedtuple('additional_argument', ['func_name', 'arg', 'line'])):
+    def __str__(self):
+        return 'function {} has been passed with additional argument {} at line {}'.format(
+            self.func_name,
+            self.name,
+            self.line
+        )
+
+
+class MissingArgument(namedtuple('missing_argument', ['func_name', 'name', 'line'])):
+    def __str__(self):
+        return 'function {} misses argument {} at line {}'.format(
+            self.func_name,
+            self.name,
+            self.line
+        )
+
+
 class NoReturn(namedtuple('no_return', ['name', 'line'])):
     def __str__(self):
         return 'no return at non void function {} starting at line {}'.format(

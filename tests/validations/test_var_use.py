@@ -3,22 +3,9 @@ import glob
 import pytest
 
 from lattec.exceptions import LatteVariableNamesError
-from lattec.parser import (
-    parse_file,
-    parse_str,
-)
+from lattec.parser import parse_file
 from lattec.validations.var_use import VarUseListener
 
-FAILING_TESTS = (
-    (
-        'returns int for void',
-        '''
-        void a() {
-            return 1;
-        }
-        '''
-    ),
-)
 
 
 @pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/good/core/*.lat', recursive=True))
@@ -55,11 +42,13 @@ def test_good_self_files(file_path):
     listener.summarize()
 
 
-@pytest.mark.parametrize('name, code', FAILING_TESTS)
-def test_var_use_failing(name, code):
-    parser = parse_str(code)
+@pytest.mark.parametrize("file_path", glob.iglob(r'tests/parser/bad/var/*.lat', recursive=True))
+def test_var_use_failing(file_path):
+    parser = parse_file(file_path)
     program = parser.program()
     listener = VarUseListener()
     program.enterRule(listener)
-    with pytest.raises(LatteVariableNamesError):
+    with pytest.raises(LatteVariableNamesError) as cm:
         listener.summarize()
+
+    assert cm.type != NotImplementedError, cm.type

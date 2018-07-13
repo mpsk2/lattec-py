@@ -9,6 +9,8 @@ from lattec.validations.base import (
 )
 from lattec.validations.types import *
 from lattec.validations.single_errors import (
+    AdditionalArgument,
+    MissingArgument,
     Redeclaration,
     UndeclaredUse,
     TypeMissMatch,
@@ -157,13 +159,20 @@ class VarUseVisitor(BaseVisitor):
         if t is None:
             t = self.state.use_var(ctx.name, ctx.start.line)
 
+        func_name = State.normalize_name(ctx.name)
+
         args = [
             arg.accept(self)
             for arg in ctx.expr()
         ]
 
         for expected, got, arg in zip_longest(t.args, args, ctx.expr()):
-            self.state.cmp_type(expected, got, arg.start.line)
+            if arg is None:
+                self.state.errors.append(MissingArgument(func_name, expected, ctx.start.line))
+            elif expected is None:
+                self.state.errors.append(AdditionalArgument(func_name, arg.getText(), arg.start.line))
+            else:
+                self.state.cmp_type(expected, got, arg.start.line)
 
         return t.ret
 
