@@ -94,16 +94,31 @@ class VarUseVisitor(BaseVisitor):
         self.state = state
         self.listener = listener
 
-    def visitProgram(self, ctx: Parser.ProgramContext):
-        return self.visitChildren(ctx)
-
     def visitFnDef(self, ctx: Parser.FnDefContext):
         args = [] if ctx.argVec() is None else ctx.argVec().accept(self)
         ret = ctx.type_().accept(self)
         return LatteFunction(args, ret)
 
     def visitClsDef(self, ctx: Parser.ClsDefContext):
-        return self.visitChildren(ctx)
+        fields = {}
+        for field in ctx.clsElem():
+            if isinstance(field, Parser.FieldContext):
+                name = field.ID().getText()
+                t = field.type_().accept(self)
+            elif isinstance(field, Parser.MethodContext):
+                name = State.normalize_name(field.topDef().name)
+                t = field.topDef().accept(self)
+            else:  # pragma: no cover
+                assert False, 'should not reach that point'
+
+            if name in fields:
+                raise NotImplementedError()
+
+            fields[name] = t
+
+        t = self.state.use_var(ctx.name, ctx.start.line)
+        t.fields = fields
+        return t
 
     def visitArgVec(self, ctx: Parser.ArgVecContext):
         return [arg.accept(self) for arg in ctx.arg()]
@@ -142,8 +157,8 @@ class VarUseVisitor(BaseVisitor):
         t = self.state.use_var(ctx.class_name, ctx.start.line)
         if isinstance(t, LatteClass):
             return LatteObject(t)
-        else:
-            raise NotImplementedError()
+
+        return None
 
     def visitNewObjArray(self, ctx:Parser.NewObjArrayContext):
         return self.visitChildren(ctx)
@@ -151,9 +166,6 @@ class VarUseVisitor(BaseVisitor):
     def visitNewBasicTypeArray(self, ctx:Parser.NewBasicTypeArrayContext):
         t = ctx.basic_type().accept(self)
         return LatteArray(t)
-
-    def visitItem(self, ctx: Parser.ItemContext):
-        return self.visitChildren(ctx)
 
     def visitEId(self, ctx: Parser.EIdContext):
         return self.state.use_var(ctx.ID(), ctx.start.line)
@@ -337,24 +349,7 @@ class VarUseListener(BaseListener):
                 fn = topDef.accept(self.visitor)
                 self.state.add_var(topDef.name, fn, topDef.start.line)
             elif isinstance(topDef, Parser.ClsDefContext):
-                fields = {}
-                for field in topDef.clsElem():
-                    if isinstance(field, Parser.FieldContext):
-                        name = field.ID().getText()
-                        t = field.type_().accept(self.visitor)
-                    elif isinstance(field, Parser.MethodContext):
-                        name = State.normalize_name(field.topDef().name)
-                        t = field.topDef().accept(self.visitor)
-                    else:
-                        raise NotImplementedError()
-
-                    if name in fields:
-                        raise NotImplementedError()
-
-                    fields[name] = t
-
-                t = self.state.use_var(topDef.name, topDef.start.line)
-                t.fields = fields
+                topDef.accept(self.visitor)
 
         self.state.level_up()
 
@@ -388,7 +383,6 @@ class VarUseListener(BaseListener):
             self.state.add_var('self', LatteObject(t), ctx.start.line)
             for name, sub_t in t.fields.items():
                 self.state.add_var(name, sub_t, ctx.start.line)
-
         else:
             raise NotImplementedError()
 
