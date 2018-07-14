@@ -55,6 +55,9 @@ def main_f():
     if args.optimize == 1:
         program_ctx = optimize(program_ctx)
 
+        if args.verbose:
+            print(program_ctx.getText())
+
     compile_latte(program_ctx)
 
 
